@@ -1,8 +1,21 @@
-import React from 'react';
+import React,{useEffect} from 'react';
+import socketIOClient from 'socket.io-client';
 import logo from './logo.svg';
 import './App.css';
 
+const ENDPOINT = "http://127.0.0.1:8080";
+
 function App() {
+
+
+  useEffect(()=>{
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit("join",data=>{
+      console.log(data);
+    });
+  })
+
+
   return (
     <div className="App">
       <header className="App-header">
