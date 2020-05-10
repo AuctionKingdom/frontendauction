@@ -1,37 +1,70 @@
-import React,{useEffect} from 'react';
+import React,{useState} from 'react';
+import Grid  from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import * as Constants from './components/constants';
 import socketIOClient from 'socket.io-client';
-import logo from './logo.svg';
-import './App.css';
+import FormControl from '@material-ui/core/FormControl';
 
-const ENDPOINT = "http://127.0.0.1:8080";
+let socket;
 
 function App() {
 
+  const [RoomName,setRoomName] = useState("");
+  const [Connected,setConnection] = useState(0);
+  const [Information,setInformation] = useState("");
 
-  useEffect(()=>{
-    const socket = socketIOClient(ENDPOINT);
-    socket.emit("join",data=>{
-      console.log(data);
-    });
-  })
+  function connectToServer(){
+    if(!Connected){
+      socket = socketIOClient(Constants.socketlink);
+      socket.on("Connected",data=>{
+        setConnection(1);
+      });
+    }
+  }
+
+  function connectToRoom(){
+    let formData = {"roomName":RoomName}
+    console.log(formData.roomName)
+    socket.emit("Create Room",formData);
+
+    socket.on("Information",data=>{
+        setInformation(Information+"<br>"+data);
+    })
+  }
+
+
+  function disConnect(socket){
+    socket.emit("disconnect");
+  }
 
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button variant="contained" color="primary" onClick={connectToServer}>
+          Connect
+        </Button>
+        <p> Connection to the Bid room: {Connected} </p>
+        <Grid container
+              direction="column"
+              justify="center"
+              alignItems="center"
         >
-          Learn React
-        </a>
-      </header>
+          <Grid item xs={12}>
+                <input type="text" onChange={(e)=>setRoomName(e.target.value)} />
+                <input type="submit" onClick={connectToRoom} />
+          </Grid>
+          <Grid item xs={12}>
+             <Button variant="contained" color="primary" onClick={disConnect}>
+                  Bid
+             </Button>
+          </Grid>
+          <Grid item xs={12}>
+              <Button variant="contained" color="primary">
+                  Pass
+              </Button>
+          </Grid>
+          <p>{Information}</p>
+        </Grid>
     </div>
   );
 }
