@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import ButtonAppBar from './components/nav';
 import * as serviceWorker from './serviceWorker';
 
+
+ReactDOM.render(<ButtonAppBar />, document.getElementById("nav"));
 ReactDOM.render(
   <React.StrictMode>
     <App />
