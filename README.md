@@ -9,3 +9,5 @@ Do the following procedure to make the react app work in your computer.
 #3. Delete package-lock.json.
 
 #4. >npm install.
+
+#5. >npm start.
