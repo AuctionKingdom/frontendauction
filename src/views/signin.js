@@ -14,7 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
-  BrowserRouter as Router,
   Link
 } from "react-router-dom"
 
@@ -23,11 +22,9 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Router>
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{' '}
-      </Router>
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -118,21 +115,17 @@ export default function SignInSide() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Router>
                 <Link to="#" variant="body2">
                   Forgot password?
                 </Link>
-                </Router>
               </Grid>
 
               <Grid item>
-                <Router>
           
-                <Link to="/signup" variant="body2">
+                <Link to={`/signup`} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>   
 
-                </Router>
               </Grid>
             </Grid>
 

@@ -1,13 +1,15 @@
 import React from 'react';
 import './App.css';
-import SignIn from './views/signin';
+//import {SignInSide} from './views/signin';
+import {BrowserRouter} from 'react-router-dom';
+import MainRouter from './routes';
 
 function App() {
-  return (
-    <div>
-      {SignIn()}
-    </div>
-  );
+    return(
+    <BrowserRouter>
+      <MainRouter />
+    </BrowserRouter>
+    )
 }
 
 export default App;

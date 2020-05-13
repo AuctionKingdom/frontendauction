@@ -15,19 +15,16 @@ import Container from '@material-ui/core/Container';
 
 import {
     Link,
-    BrowserRouter as Router,
-} from 'react-router-dom'
+ } from 'react-router-dom'
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Router>
-      <Link color="inherit" href="https://material-ui.com/">
+       <Link color="inherit" href="https://material-ui.com/">
         Your Website
       </Link>{' '}
-      </Router>
-      {new Date().getFullYear()}
+       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
@@ -132,12 +129,11 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-            <Router>
               <Link to="/signin">
                 Already have an account? Sign in
               </Link>
               
-              </Router>
+             
             </Grid>
           </Grid>
         </form>
