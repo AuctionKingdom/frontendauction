@@ -2,18 +2,29 @@ import React, {useEffect, useState} from 'react';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
-import base64 from 'base-64';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 function RoomPage(props){
 
     const [currentPlayer,changePlayer] = useState(null);
     const [currentBid, changeCurrentBid] = useState(null);
-    const [YourBid, changeBid] = useState(0);
-    const [baseBid, setBaseBid] = useState(0);
+    const [YourBid, changeBid] = useState(null);
+    const [baseBid, setBaseBid] = useState(null);
+    const [users,setUsers] = useState(null);
+
+    const useStyles = makeStyles({
+        root: {
+              maxWidth: 345,
+            },
+        });
+
 
     useEffect(()=>{
-       
+
         props.socket.on('newPlayer',data=>{
             console.log(data)
             changePlayer(data.player);
@@ -36,10 +47,38 @@ function RoomPage(props){
     },[YourBid,props.socket,props.match.params.slug])
 
 
+    useEffect(()=>{
+        props.socket.on('people',data=>{
+              setUsers(data);
+        })
+    })
+
+    function renderUser(){
+      if (users) {
+          return Object.keys(users).map( (key) => {
+              return (
+                  <Grid item xs={6}>
+                      <Card className={useStyles.root}>
+                              <CardContent>
+                                <Typography gutterBottom variant="body2" component="p">
+                                    {key}
+                                </Typography>
+                              </CardContent>
+                      </Card>
+                  </Grid>
+              );
+          });
+        } else {
+            return <p>No Users Available</p>;
+        }
+
+    }
+
+
     return(
-  
+
             <Grid container direction="column" justify="center" alignContent="center" spacing={5} style={{marginTop:'5%'}}>
-            
+
             <Grid item xs={12}>
                 Current Player: {currentPlayer}<br />
                 Current Bid: { currentBid }<br />
@@ -62,13 +101,23 @@ function RoomPage(props){
                     Pass
                 </Button>
             </Grid>
+            <Grid item xs={12}>
+                <Grid container
+                      direction="row"
+                      justify="center"
+                      alignItems="center"
+                      spacing={2}
+                >
+                  {renderUser()}
+                </Grid>
+            </Grid>
             </Grid>
        )
 
 }
 
 const Room = props=>{
-    
+
     return(
         <SocketContext.Consumer>
             {socket=><RoomPage {...props} socket={socket} /> }
