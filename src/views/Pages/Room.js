@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useParams} from 'react';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 function RoomPage(props){
 
+    let { slug } = useParams();
     const [currentPlayer,changePlayer] = useState(null);
     const [currentBid, changeCurrentBid] = useState(null);
     const [YourBid, changeBid] = useState(null);
@@ -26,7 +27,6 @@ function RoomPage(props){
     useEffect(()=>{
 
         props.socket.on('newPlayer',data=>{
-            console.log(data)
             changePlayer(data.player);
             changeCurrentBid(data.currentBid);
             setBaseBid(data.increment);
@@ -42,9 +42,9 @@ function RoomPage(props){
 
     useEffect(()=>{
 
-        props.socket.emit('increaseBid',{'roomName':props.match.params.slug,'bid':YourBid})
+        props.socket.emit('increaseBid',{'roomName':slug,'bid':YourBid})
 
-    },[YourBid,props.socket,props.match.params.slug])
+    },[YourBid,props.socket])
 
 
     useEffect(()=>{
@@ -86,7 +86,7 @@ function RoomPage(props){
             </Grid>
 
             <Grid item xs={12}>
-                <Button variant="contained" color="secondary" onClick = {()=>{props.socket.emit('Start',props.match.params.slug)}}>
+                <Button variant="contained" color="secondary" onClick = {()=>{props.socket.emit('Start',slug)}}>
                     Start Auction
                 </Button>
             </Grid>
