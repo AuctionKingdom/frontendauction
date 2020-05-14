@@ -1,18 +1,20 @@
 import React from 'react';
-import {Route,Switch} from 'react-router';
+import { Router, Switch, Route } from "react-router-dom";
 import SignIn from './views/signin';
 import SignUp from './views/signup';
-import Home from './views/home';
+import history from './history';
 
 //import App from './App';
 
 const MainRouter = () => (
     <div>
+        <Router history={history}>
         <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={SignIn} />
             <Route path="/signin" component={SignIn} />
             <Route path="/signup" component={SignUp} />
         </Switch>
+        </Router>
     </div>
 )
 
