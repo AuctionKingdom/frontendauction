@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -6,11 +6,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {useLocation } from 'react-router-dom';
+import {useLocation, Redirect } from 'react-router-dom';
 import history from './../history';
 import Typing from 'react-typing-animation';
 import Slide from '@material-ui/core/Slide';
-import SigninAuth from './../Auth/signinauth'
+import {signin,authenticate} from './../Auth/userauth'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,76 +29,142 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
-  const classes = useStyles();
-  let location = useLocation();
+class SignIn extends Component {
+  constructor() {
+      super()
+      this.state = {
+          email:"",
+          password:"",
+          error:"",
+          redirectToRefer: false,
+      }
+  }
+  //changing state of variables
+  handleChange = (name) => (event) => {
+      this.setState({error: ""})
+      this.setState({[name]: event.target.value});
+  }
 
+  
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
+  clickSubmit = event => {
+      event.preventDefault()
+      const {email,password} = this.state;
+      const user = {
+          email,
+          password
+      };
+      //console.log(user)
+      signin(user)
+      .then(data => {
+          if(data.error) { 
+              this.setState({error: data.error})
+          }
+          else
+          {
+              //authenticate
+              //redirect
+              authenticate(data,()=> {
+                  this.setState({redirectToRefer: true})
+              });
+          }
+      })
 
-        <div className={classes.paper}>
+    }
 
-        <Typing>
-          <Typography variant="h4" component="h2">
-            Auction Kingdom
-          </Typography>
-        </Typing>
+  SignInForm = (email, password ,error) => {
 
-        <br></br>
-
-        <Grid container justify="center" spacing={2}>
-          <Grid item>
-            <Button variant={location.pathname === '/signin' || location.pathname === '/'  ? "contained" : "outlined"} color="primary">Sign In</Button>
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+  
+          <div>
+  
+          <Typing>
+            <Typography variant="h4" component="h2">
+              Auction Kingdom
+            </Typography>
+          </Typing>
+  
+          <br></br>
+  
+          <Grid container justify="center" spacing={2}>
+            <Grid item>
+              <Button variant={history.location.pathname === '/signin' || history.location.pathname === '/'  ? "contained" : "outlined"} color="primary">Sign In</Button>
+            </Grid>
+            <Grid item>
+              <Button variant={history.location.pathname === '/signup' ? "contained" : "outlined"} color="primary" onClick={() => history.push('/signup')}>Sign Up</Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button variant={location.pathname === '/signup' ? "contained" : "outlined"} color="primary" onClick={() => history.push('/signup')}>Sign Up</Button>
-          </Grid>
-        </Grid>
-
-
-        <form className={classes.form} onSubmit={SigninAuth}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-
-            <Button
-              type="submit"
+  
+  
+          <form>
+            <TextField
+              onChange={this.handleChange("email")}
+              variant="outlined"
+              margin="normal"
+              required
               fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign In
-          </Button>
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              onChange={this.handleChange("password")}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Slide direction="up" in={true} mountOnEnter unmountOnExit>
+  
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick = {this.clickSubmit}
+              >
+                Sign In
+            </Button>
+  
+            </Slide>
+  
+          </form>
+        </div>
+        <br></br>
+        <hr />
+        <div style={{ display: error ? "" : "none" }}>
+               {error}
+        </div>
+  
+  
+      </Container>
+    );
+  }
 
-          </Slide>
+  render() {
+      const {email, password,error,redirectToRefer} = this.state
 
-        </form>
-      </div>
-
-
-    </Container>
-  );
+      if(redirectToRefer) {
+          return <Redirect to="/room"/>
+      }
+      return(
+          <div>
+              {this.SignInForm(email, password, error)}
+          </div>
+      );
+  }
 }
+
+
+export default SignIn;
+
+

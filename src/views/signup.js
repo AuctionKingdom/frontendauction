@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,15 +9,15 @@ import Container from '@material-ui/core/Container';
 import history from './../history';
 import Typing from 'react-typing-animation';
 import Slide from '@material-ui/core/Slide';
-import SignupAuth from './../Auth/signupauth';
+import {signup} from './../Auth/userauth';
 
 
 import {
-    useLocation 
+    useLocation,Redirect
  } from 'react-router-dom'
 
 
-const useStyles = makeStyles((theme) => ({
+const myStyles = makeStyles((theme) => ({
   paper: {        
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -36,89 +36,159 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+//const classes = myStyles();
+//let location = useLocation();
 
-export default function SignUp() {
-  const classes = useStyles();
-  let location = useLocation();
+class SignUp extends Component {
+  constructor() {
+    super()
+    this.state = {
+      name: "",
+      email: "",
+      password: "",
+      error: "",
+      RedirectTo: ""
+    }
+  }
+
+  handleChange = (name) => (event) => {
+    this.setState({error: ""})
+    this.setState({[name]: event.target.value})
+  }
+
+  clickSubmit = event => {
+    event.preventDefault()
+    const {name,email,password} = this.state
+    const user = {
+      name,
+      email,
+      password,
+    }
+    console.log(user)
+    signup(user)
+    .then(data => {
+      if (data.error)
+          this.setState({error: data.error})
+      else
+          this.setState({
+            error:"",
+            name: "",
+            email: "",
+            password: "",
+            RedirectTo: true
+          })
+    })
+  }
+
+  SignUpForm = (name, email, password, error) => {
+    
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />   {/* compulsary */}
+        <div>
+        
+      <Typing>
+      <Typography variant="h4" component="h2">
+        Auction Kingdom
+      </Typography>
+      </Typing>
+      <br></br>
+        
+        <Grid container justify="center" spacing={2}>
   
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />   {/* compulsary */}
-      <div className={classes.paper}>
-      
-    <Typing>
-    <Typography variant="h4" component="h2">
-      Auction Kingdom
-    </Typography>
-    </Typing>
-    <br></br>
-      
-      <Grid container justify="center" spacing={2}>
-
+              <Grid item>
+              
+              <Button variant={history.location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.push('/signin')}>Sign In</Button>
+              </Grid>
             <Grid item>
-            
-            <Button variant={location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.push('/signin')}>Sign In</Button>
+              <Button variant={history.location.pathname === '/signup' ? "contained" : "outlined" } color="primary" >Sign Up</Button>
+              </Grid>
             </Grid>
-          <Grid item>
-            <Button variant={location.pathname === '/signup' ? "contained" : "outlined" } color="primary" >Sign Up</Button>
+  
+         
+          <form>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={this.handleChange("name")}
+                  autoComplete="name"
+                  name="userName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="Name"
+                  label="Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={this.handleChange("email")}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={this.handleChange("password")}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+              </Grid>
             </Grid>
-          </Grid>
+            <Slide direction="up" in={true} mountOnEnter unmountOnExit>      
+  
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick = {this.clickSubmit}
+            >
+              Sign Up
+            </Button>
+  
+            </Slide>
+          </form>
+        </div>
+        <br></br>
+          <hr />
+          <div style={{display: error ? "" : "none" }}>
+              {error}
+          </div>
+      </Container>
+    );
+  }
 
-       
-        <form className={classes.form} onSubmit={SignupAuth}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="name"
-                name="userName"
-                variant="outlined"
-                required
-                fullWidth
-                id="Name"
-                label="Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-          </Grid>
-          <Slide direction="up" in={true} mountOnEnter unmountOnExit>      
+  render () {
+    const {name, email, password, error, RedirectTo} = this.state
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
+    if(RedirectTo) {
+      return <Redirect to="/signin"></Redirect>
+    }
 
-          </Slide>
-        </form>
+    return (
+      <div>
+        {this.SignUpForm(name, email, password, error)}
       </div>
-    </Container>
-  );
+    )
+  }
+
 }
+
+
+export default SignUp;
+
+
 

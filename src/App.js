@@ -17,10 +17,10 @@ const THEME = createMuiTheme({
 function App() {
     return(
       <MuiThemeProvider theme={THEME}>
-    <BrowserRouter>
-      <MainRouter />
-    </BrowserRouter>
-    </MuiThemeProvider>
+        <BrowserRouter>
+          <MainRouter />
+        </BrowserRouter>
+      </MuiThemeProvider>
     )
 }
 
