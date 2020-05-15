@@ -40,12 +40,12 @@ function HomePage(props) {
 
   useEffect(()=>{
 
-    if(!props.location.Auth){
+    if(!props.location.state.Auth){
         seterrModal("Please Login");
         setOpen(true);
 
         setTimeout(()=>{
-            history.replace('/Signup')
+            history.replace('/')
         },1000);
     }
 
@@ -57,7 +57,7 @@ function HomePage(props) {
   */
   function playOnline(){
 
-        socket.emit('PlayOnline',props.location.token,()=>{
+        socket.emit('PlayOnline',"NA",()=>{
 
              socket.on('success',data=>{
                   history.push('/room/'+data.roomId,{token:props.location.token})
