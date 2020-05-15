@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useHistory } from 'react-router-dom';
+import { useHistory , useLocation } from 'react-router-dom';
 import SocketContext from '../../socket-context.js';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage(props) {
 
+  let location = useLocation();
   let history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -40,13 +41,21 @@ function HomePage(props) {
 
   useEffect(()=>{
 
-    if(!props.location.state.Auth){
+    if(location.state === undefined){
         seterrModal("Please Login");
         setOpen(true);
 
         setTimeout(()=>{
             history.replace('/')
-        },1000);
+        },1500);
+    }else if(location.state.Auth === false){
+        seterrModal("Please Login");
+        setOpen(true);
+
+        setTimeout(()=>{
+            history.replace('/');
+        },1500)
+
     }
 
   })
@@ -57,13 +66,13 @@ function HomePage(props) {
   */
   function playOnline(){
 
-        socket.emit('PlayOnline',"NA",()=>{
+        props.socket.emit('PlayOnline',"NA",()=>{
 
-             socket.on('success',data=>{
-                  history.push('/room/'+data.roomId,{token:props.location.token})
+             props.socket.on('success',data=>{
+                  history.push('/room/'+data.roomId,{token:"null"})
              })
 
-             socket.on('failure',data=>{
+             props.socket.on('failure',data=>{
                   seterrModal(data);
                   setOpen(true);
              })
@@ -77,15 +86,15 @@ function HomePage(props) {
 
   function createRoom(){
 
-      socket.emit('CreateRoom',props.location.token,()=>{
+      props.socket.emit('CreateRoom',location.state.Auth,()=>{
 
-          socket.on('success',data=>{
+          props.socket.on('success',data=>{
 
-                history.push('/room/'+data.roomId,{token:props.location.token})
+                history.push('/room/'+data.roomId,{token:"null"})
 
           })
 
-          socket.on('failure',data=>{
+          props.socket.on('failure',data=>{
 
               seterrModal(data);
               setOpen(true);
@@ -93,6 +102,10 @@ function HomePage(props) {
 
       })
   }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   /**
     JoinRoom is different as it gets the form input for the roomId to join
@@ -102,11 +115,11 @@ function HomePage(props) {
 
   function JoinRoom(){
 
-      socket.emit('JoinRoom',{'roomId':roomId,'token':props.location.token},()=>{
-          socket.on('success',data=>{
-              history.push('/room/'+data.roomId,{token:props.location.token})
+      props.socket.emit('JoinRoom',{'roomId':roomId,'token':"null"},()=>{
+          props.socket.on('success',data=>{
+              history.push('/room/'+data.roomId,{token:"null"})
           })
-          socket.on('failure',data=>{
+          props.socket.on('failure',data=>{
 
               seterrModal(data);
               setOpen(true);

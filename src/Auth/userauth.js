@@ -1,6 +1,6 @@
-export const signup = (user) => {
+export const signup = async(user) => {
     //console.log(`${process.env.rest_url}/signup`)
-    return fetch(`${process.env.REACT_APP_API_URL}/signup`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
         method: "POST",
         headers: {
             Accept:"application/json",
@@ -14,8 +14,8 @@ export const signup = (user) => {
     .catch(err => console.log(err))
 }
 
-export const signin = (user) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
+export const signin = async(user) => {
+    return await fetch(`${process.env.REACT_APP_API_URL}/signin`, {
         method: "POST",
         headers: {
             Accept:"application/json",

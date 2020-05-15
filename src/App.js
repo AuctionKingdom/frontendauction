@@ -21,11 +21,11 @@ const THEME = createMuiTheme({
 const socket = socketIOClient(Constants.socketlink);
 
 function App() {
-  
+
 
   return(
     <SocketContext.Provider value={socket}>
-        <MuiThemeProvider theme={THEME}> 
+        <MuiThemeProvider theme={THEME}>
                  <MainRouter />
       </MuiThemeProvider>
     </SocketContext.Provider>

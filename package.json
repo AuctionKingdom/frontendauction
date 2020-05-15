@@ -14,9 +14,9 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.1",
-    "socket.io-client": "2.3.0"
     "react-typewriter-hook": "^1.0.1",
-    "react-typing-animation": "^1.6.2"
+    "react-typing-animation": "^1.6.2",
+    "socket.io-client": "2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
