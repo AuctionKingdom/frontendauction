@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import history from './../history';
 import Typing from 'react-typing-animation';
@@ -17,7 +17,7 @@ import {
  } from 'react-router-dom'
 
 
-const myStyles = makeStyles((theme) => ({
+const myStyles = (theme) => ({
   paper: {        
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -35,9 +35,8 @@ const myStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
-//const classes = myStyles();
-//let location = useLocation();
+});
+
 
 class SignUp extends Component {
   constructor() {
@@ -47,7 +46,8 @@ class SignUp extends Component {
       email: "",
       password: "",
       error: "",
-      RedirectTo: ""
+      RedirectTo: "",
+      title: "Auction Kingdom"
     }
   }
 
@@ -85,13 +85,9 @@ class SignUp extends Component {
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />   {/* compulsary */}
-        <div>
-        
-      <Typing>
-      <Typography variant="h4" component="h2">
-        Auction Kingdom
-      </Typography>
-      </Typing>
+        <div className = {this.props.classes.paper}>
+      <h1>{this.state.title}</h1>
+      
       <br></br>
         
         <Grid container justify="center" spacing={2}>
@@ -105,8 +101,8 @@ class SignUp extends Component {
               </Grid>
             </Grid>
   
-         
-          <form>
+          <br></br>
+          <form classname = {this.props.classes.form}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -155,6 +151,7 @@ class SignUp extends Component {
               variant="contained"
               color="primary"
               onClick = {this.clickSubmit}
+              className  = {this.props.classes.submit}
             >
               Sign Up
             </Button>
@@ -172,7 +169,8 @@ class SignUp extends Component {
   }
 
   render () {
-    const {name, email, password, error, RedirectTo} = this.state
+    const {name, email, password, error, RedirectTo} = this.state;
+    const { classes } = this.props;
 
     if(RedirectTo) {
       return <Redirect to="/signin"></Redirect>
@@ -188,7 +186,7 @@ class SignUp extends Component {
 }
 
 
-export default SignUp;
+export default withStyles(myStyles)(SignUp);
 
 
 

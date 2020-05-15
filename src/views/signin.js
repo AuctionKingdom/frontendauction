@@ -4,16 +4,17 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useLocation, Redirect } from 'react-router-dom';
 import history from './../history';
 import Typing from 'react-typing-animation';
 import Slide from '@material-ui/core/Slide';
 import {signin,authenticate} from './../Auth/userauth'
+import {useTypewriter} from 'react-typewriter-hook'
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+});
 
 class SignIn extends Component {
   constructor() {
@@ -37,6 +38,7 @@ class SignIn extends Component {
           password:"",
           error:"",
           redirectToRefer: false,
+          title:"Auction Kingdom"
       }
   }
   //changing state of variables
@@ -78,8 +80,7 @@ class SignIn extends Component {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
   
-          <div>
-  
+          <div className = {this.props.classes.paper}>
           <Typing>
             <Typography variant="h4" component="h2">
               Auction Kingdom
@@ -98,7 +99,7 @@ class SignIn extends Component {
           </Grid>
   
   
-          <form>
+          <form className = {this.props.classes.form}>
             <TextField
               onChange={this.handleChange("email")}
               variant="outlined"
@@ -131,6 +132,7 @@ class SignIn extends Component {
                 variant="contained"
                 color="primary"
                 onClick = {this.clickSubmit}
+                className = {this.props.classes.submit}
               >
                 Sign In
             </Button>
@@ -151,7 +153,8 @@ class SignIn extends Component {
   }
 
   render() {
-      const {email, password,error,redirectToRefer} = this.state
+      const {email, password,error,redirectToRefer} = this.state;
+      const {classes} = this.props;
 
       if(redirectToRefer) {
           return <Redirect to="/room"/>
@@ -165,6 +168,6 @@ class SignIn extends Component {
 }
 
 
-export default SignIn;
+export default withStyles(useStyles)(SignIn);
 
 
