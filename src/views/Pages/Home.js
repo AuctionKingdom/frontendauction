@@ -34,7 +34,7 @@ function HomePage(props) {
   const [open, setOpen] = useState(false);
   const [errModal,seterrModal] = useState(null);
   const [roomId,setRoomId] = useState(null);
-
+  const [jwtToken,setToken] = useState(localStorage.getItem('jwt'))
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
@@ -49,15 +49,25 @@ function HomePage(props) {
             history.replace('/')
         },1500);
     }else if(location.state.Auth === false){
-        seterrModal("Please Login");
+        seterrModal("Not Authenticated");
         setOpen(true);
 
         setTimeout(()=>{
             history.replace('/');
         },1500)
-
     }
 
+  })
+
+  useEffect(()=>{
+      props.socket.on('success',data=>{
+           history.push('/room/'+data,{token:jwtToken})
+      })
+
+      props.socket.on('failure',data=>{
+           seterrModal(data);
+           setOpen(true);
+      })
   })
 
   /**
@@ -66,17 +76,8 @@ function HomePage(props) {
   */
   function playOnline(){
 
-        props.socket.emit('PlayOnline',"NA",()=>{
+        props.socket.emit('PlayOnline',{token:jwtToken})
 
-             props.socket.on('success',data=>{
-                  history.push('/room/'+data.roomId,{token:"null"})
-             })
-
-             props.socket.on('failure',data=>{
-                  seterrModal(data);
-                  setOpen(true);
-             })
-        })
   }
 
   /**
@@ -86,21 +87,8 @@ function HomePage(props) {
 
   function createRoom(){
 
-      props.socket.emit('CreateRoom',location.state.Auth,()=>{
+      props.socket.emit('CreateRoom',{token:jwtToken})
 
-          props.socket.on('success',data=>{
-
-                history.push('/room/'+data.roomId,{token:"null"})
-
-          })
-
-          props.socket.on('failure',data=>{
-
-              seterrModal(data);
-              setOpen(true);
-          })
-
-      })
   }
 
   const handleClose = () => {
@@ -115,9 +103,9 @@ function HomePage(props) {
 
   function JoinRoom(){
 
-      props.socket.emit('JoinRoom',{'roomId':roomId,'token':"null"},()=>{
+      props.socket.emit('JoinRoom',{'roomId':roomId,'token':jwtToken},()=>{
           props.socket.on('success',data=>{
-              history.push('/room/'+data.roomId,{token:"null"})
+              history.push('/room/'+data,{token:jwtToken})
           })
           props.socket.on('failure',data=>{
 

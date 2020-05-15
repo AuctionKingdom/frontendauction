@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -48,7 +48,7 @@ function SignIn(){
           email,
           password
       };
-      //console.log(user)
+      console.log(user)
       signin(user)
       .then(data => {
           if(data.error) {
@@ -56,6 +56,7 @@ function SignIn(){
           }
           else
           {
+              console.log("Entering here");
               //authenticate
               //redirect
               authenticate(data,()=> {
@@ -65,6 +66,14 @@ function SignIn(){
       })
 
     }
+
+    useEffect(()=>{
+      if(redirectToRefer === true)
+          history.push({
+              pathname:'/home',
+              state:{Auth:redirectToRefer}
+          })
+    },[redirectToRefer])
 
   const SignInForm = () => {
 
@@ -123,7 +132,7 @@ function SignIn(){
                           fullWidth
                           variant="contained"
                           color="primary"
-                          onClick = {(e)=>{clickSubmit()}}
+                          onClick = {clickSubmit}
                           className = {classes.submit}
                         >
                           Sign In
@@ -146,10 +155,7 @@ function SignIn(){
 
   return(
           <div>
-              {redirectToRefer? history.push({
-                  pathname:'/home',
-                  state:{Auth:redirectToRefer}
-              }): SignInForm()}
+              {SignInForm()}
           </div>
       );
   }

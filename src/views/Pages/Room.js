@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useParams} from 'react';
+import React, {useEffect, useState} from 'react';
+import { useParams } from 'react-router-dom';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
