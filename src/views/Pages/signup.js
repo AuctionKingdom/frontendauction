@@ -90,7 +90,7 @@ function SignUp(){
         <Grid container justify="center" spacing={2}>
 
             <Grid item>
-                <Button variant={location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.push('/signin')}>Sign In</Button>
+                <Button variant={location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.replace('/signin')}>Sign In</Button>
             </Grid>
             <Grid item>
               <Button variant={location.pathname === '/signup' ? "contained" : "outlined" } color="primary" >Sign Up</Button>

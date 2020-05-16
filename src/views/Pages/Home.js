@@ -10,6 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import {jwtauth} from '../../Auth/userauth';
+import ButtonAppBar from '../../components/nav.js';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -41,19 +43,36 @@ function HomePage(props) {
 
   useEffect(()=>{
 
-    if(location.state === undefined){
+    if(jwtToken !== null){
+        jwtauth(jwtToken)
+               .then( data =>{
+                    if(data.error){
+                        seterrModal("Invalid JWT");
+                        setOpen(true);
+                        localStorage.removeItem('jwt');
+                        setTimeout(()=>{
+                          console.log(location.pathname);
+                          history.push('/',{previousLocation:location.pathname})
+                        },1500);
+                    }else{
+                        location.state = {}
+                        location.state.Auth = true;
+                    }
+               })
+    }else if(location.state === undefined){
         seterrModal("Please Login");
         setOpen(true);
 
         setTimeout(()=>{
-            history.replace('/')
+            console.log(location.pathname);
+            history.push('/',{previousLocation:location.pathname})
         },1500);
     }else if(location.state.Auth === false){
         seterrModal("Not Authenticated");
         setOpen(true);
 
         setTimeout(()=>{
-            history.replace('/');
+            history.push('/',{previousLocation:location.pathname});
         },1500)
     }
 
@@ -198,7 +217,12 @@ function HomePage(props) {
 
 const Home = props => (
     <SocketContext.Consumer>
-      {socket => <HomePage {...props} socket={socket} />}
+      {socket =>
+        <React.Fragment>
+          <ButtonAppBar />
+          <HomePage {...props} socket={socket} />
+        </React.Fragment>
+      }
     </SocketContext.Consumer>
 )
 

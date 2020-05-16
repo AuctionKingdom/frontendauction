@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import {useHistory,useLocation } from 'react-router-dom';
 import Typing from 'react-typing-animation';
 import Slide from '@material-ui/core/Slide';
-import {signin,authenticate} from '../../Auth/userauth'
+import {signin,authenticate, jwtauth} from '../../Auth/userauth'
 import {useTypewriter} from 'react-typewriter-hook';
 
 
@@ -42,13 +42,53 @@ function SignIn(){
   const [redirectToRefer,setRedirect] = useState(false);
   const [title,setTitle]=useState("Auction Kingdom");
 
+  useEffect(()=>{
+
+        let token = localStorage.getItem('jwt');
+        //Checks for the availability of JWT Token
+
+        if(token){
+
+          jwtauth(token)
+                 .then( data =>{
+                      //Data Error is possible only if someone corrupts JWT
+                      if(data.error){
+                          setError("Invalid JWT");
+                          localStorage.removeItem('jwt');
+                          setTimeout(()=>{
+                            history.replace('/')
+                          },1500);
+
+                      }else{
+                          //location state helps to say whether he has been redirected to login from a room
+                          if(location.state){
+
+                              //In the presence of the previousLocation, Please redirect on successful authentication
+
+                              if(location.state.previousLocation){
+                                  history.push(location.state.previousLocation,{Auth:true})
+                              }
+
+                          }else{
+
+                              history.replace('/home',{Auth:redirectToRefer})
+                          }
+
+                      }
+                 })
+        }
+  })
+
   const clickSubmit = event => {
+
       event.preventDefault()
+
       const user = {
           email,
           password
       };
-      console.log(user)
+      //Call Signin function
+
       signin(user)
       .then(data => {
           if(data.error) {
@@ -56,7 +96,6 @@ function SignIn(){
           }
           else
           {
-              console.log("Entering here");
               //authenticate
               //redirect
               authenticate(data,()=> {
@@ -68,11 +107,16 @@ function SignIn(){
     }
 
     useEffect(()=>{
-      if(redirectToRefer === true)
-          history.push({
-              pathname:'/home',
-              state:{Auth:redirectToRefer}
-          })
+      if(redirectToRefer === true){
+            //Similar logic to the one written to check for JWT but only the redirect part
+            if(location.state){
+                if(location.state.previousLocation){
+                    history.push(location.state.previousLocation,{Auth:true})
+                }
+            }else{
+                history.replace('/home',{Auth:redirectToRefer})
+            }
+      }
     },[redirectToRefer])
 
   const SignInForm = () => {
@@ -95,7 +139,7 @@ function SignIn(){
                         <Button variant={location.pathname === '/signin' || location.pathname === '/'  ? "contained" : "outlined"} color="primary">Sign In</Button>
                       </Grid>
                       <Grid item>
-                        <Button variant={location.pathname === '/signup' ? "contained" : "outlined"} color="primary" onClick={() => history.push('/signup')}>Sign Up</Button>
+                        <Button variant={location.pathname === '/signup' ? "contained" : "outlined"} color="primary" onClick={() => history.replace('/signup')}>Sign Up</Button>
                       </Grid>
                     </Grid>
 
