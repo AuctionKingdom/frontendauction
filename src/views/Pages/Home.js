@@ -30,13 +30,14 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage(props) {
 
+  let jwtToken = localStorage.getItem('jwt');
   let location = useLocation();
   let history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [errModal,seterrModal] = useState(null);
   const [roomId,setRoomId] = useState(null);
-  const [jwtToken,setToken] = useState(localStorage.getItem('jwt'))
+
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
@@ -76,9 +77,10 @@ function HomePage(props) {
         },1500)
     }
 
-  })
+  },[jwtToken, location.state, location.pathname, history])
 
   useEffect(()=>{
+
       props.socket.on('success',data=>{
            history.push('/room/'+data,{token:jwtToken})
       })
@@ -106,7 +108,7 @@ function HomePage(props) {
 
   function createRoom(){
 
-      props.socket.emit('CreateRoom',{token:jwtToken})
+      props.socket.emit('Create Room',{token:jwtToken})
 
   }
 
@@ -122,16 +124,7 @@ function HomePage(props) {
 
   function JoinRoom(){
 
-      props.socket.emit('JoinRoom',{'roomId':roomId,'token':jwtToken},()=>{
-          props.socket.on('success',data=>{
-              history.push('/room/'+data,{token:jwtToken})
-          })
-          props.socket.on('failure',data=>{
-
-              seterrModal(data);
-              setOpen(true);
-          })
-      })
+      props.socket.emit('Join Room',{'roomId':roomId,'token':jwtToken})
 
   }
 
@@ -181,11 +174,10 @@ function HomePage(props) {
                           style={{paddingTop:'5%'}}
                     >
                       <Grid item md={12} xs={12} style={{borderBotton:'1px solid black'}}>
-                        <Button variant="contained" color="secondary" type="submit">Create Room</Button>
+                        <Button variant="contained" color="secondary" type="submit" onClick={()=>{createRoom()}}>Create Room</Button>
                       </Grid>
 
                       <Grid item md={10} xs={10}>
-                          <form onSubmit={()=>{JoinRoom()}}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -202,10 +194,10 @@ function HomePage(props) {
                                   fullWidth
                                   variant="contained"
                                   color="primary"
+                                  onClick={()=>{JoinRoom()}}
                             >
                                   Join Now
                             </Button>
-                        </form>
                       </Grid>
                     </Grid>
                 </Paper>

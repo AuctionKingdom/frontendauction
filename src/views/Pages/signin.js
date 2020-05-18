@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useHistory,useLocation } from 'react-router-dom';
-import Typing from 'react-typing-animation';
 import Slide from '@material-ui/core/Slide';
 import {signin,authenticate, jwtauth} from '../../Auth/userauth'
 import {useTypewriter} from 'react-typewriter-hook';
@@ -55,25 +54,12 @@ function SignIn(){
                       if(data.error){
                           setError("Invalid JWT");
                           localStorage.removeItem('jwt');
-                          setTimeout(()=>{
-                            history.replace('/')
-                          },1500);
-
+                            setTimeout(()=>{
+                              history.replace('/')
+                            },1500);
                       }else{
                           //location state helps to say whether he has been redirected to login from a room
-                          if(location.state){
-
-                              //In the presence of the previousLocation, Please redirect on successful authentication
-
-                              if(location.state.previousLocation){
-                                  history.push(location.state.previousLocation,{Auth:true})
-                              }
-
-                          }else{
-
-                              history.replace('/home',{Auth:redirectToRefer})
-                          }
-
+                          setRedirect(true);
                       }
                  })
         }
@@ -126,11 +112,9 @@ function SignIn(){
                   <CssBaseline />
 
                     <div className = {classes.paper}>
-                    <Typing>
                       <Typography variant="h4" component="h2">
                         {title}
                       </Typography>
-                    </Typing>
 
                     <br></br>
 

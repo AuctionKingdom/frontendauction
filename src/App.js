@@ -1,11 +1,12 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 
-import { BrowserRouter, Route, Switch , Redirect} from 'react-router-dom';
 import * as Constants from './components/constants';
 import SocketContext from './socket-context';
 import socketIOClient from 'socket.io-client';
 import MainRouter from './routes.js';
 import { MuiThemeProvider, createMuiTheme  } from '@material-ui/core/styles';
+import { jwtChange } from './background/jwtTask';
+
 
 const THEME = createMuiTheme({
   typography: {
@@ -22,6 +23,11 @@ const socket = socketIOClient(Constants.socketlink);
 
 function App() {
 
+  useEffect(()=>{
+
+      jwtChange();
+
+  },[])
 
   return(
     <SocketContext.Provider value={socket}>

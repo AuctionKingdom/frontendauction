@@ -37,7 +37,7 @@ export default function ButtonAppBar() {
           let token = JSON.parse(jwtToken);
           setName(token.user.name);
       }
-  })
+  },[])
 
   //Signout feature
 
