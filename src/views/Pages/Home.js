@@ -10,8 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import {jwtauth} from '../../Auth/userauth';
-import ButtonAppBar from '../../components/nav.js';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -30,57 +28,38 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage(props) {
 
-  let jwtToken = localStorage.getItem('jwt');
   let location = useLocation();
   let history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [errModal,seterrModal] = useState(null);
   const [roomId,setRoomId] = useState(null);
-
+  const [jwtToken,setToken] = useState(localStorage.getItem('jwt'))
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
 
   useEffect(()=>{
 
-    if(jwtToken !== null){
-        jwtauth(jwtToken)
-               .then( data =>{
-                    if(data.error){
-                        seterrModal("Invalid JWT");
-                        setOpen(true);
-                        localStorage.removeItem('jwt');
-                        setTimeout(()=>{
-                          console.log(location.pathname);
-                          history.push('/',{previousLocation:location.pathname})
-                        },1500);
-                    }else{
-                        location.state = {}
-                        location.state.Auth = true;
-                    }
-               })
-    }else if(location.state === undefined){
+    if(location.state === undefined){
         seterrModal("Please Login");
         setOpen(true);
 
         setTimeout(()=>{
-            console.log(location.pathname);
-            history.push('/',{previousLocation:location.pathname})
+            history.replace('/')
         },1500);
     }else if(location.state.Auth === false){
         seterrModal("Not Authenticated");
         setOpen(true);
 
         setTimeout(()=>{
-            history.push('/',{previousLocation:location.pathname});
+            history.replace('/');
         },1500)
     }
 
-  },[jwtToken, location.state, location.pathname, history])
+  })
 
   useEffect(()=>{
-
       props.socket.on('success',data=>{
            history.push('/room/'+data,{token:jwtToken})
       })
@@ -108,7 +87,7 @@ function HomePage(props) {
 
   function createRoom(){
 
-      props.socket.emit('Create Room',{token:jwtToken})
+      props.socket.emit('CreateRoom',{token:jwtToken})
 
   }
 
@@ -124,7 +103,16 @@ function HomePage(props) {
 
   function JoinRoom(){
 
-      props.socket.emit('Join Room',{'roomId':roomId,'token':jwtToken})
+      props.socket.emit('JoinRoom',{'roomId':roomId,'token':jwtToken},()=>{
+          props.socket.on('success',data=>{
+              history.push('/room/'+data,{token:jwtToken})
+          })
+          props.socket.on('failure',data=>{
+
+              seterrModal(data);
+              setOpen(true);
+          })
+      })
 
   }
 
@@ -174,10 +162,11 @@ function HomePage(props) {
                           style={{paddingTop:'5%'}}
                     >
                       <Grid item md={12} xs={12} style={{borderBotton:'1px solid black'}}>
-                        <Button variant="contained" color="secondary" type="submit" onClick={()=>{createRoom()}}>Create Room</Button>
+                        <Button variant="contained" color="secondary" type="submit">Create Room</Button>
                       </Grid>
 
                       <Grid item md={10} xs={10}>
+                          <form onSubmit={()=>{JoinRoom()}}>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -194,10 +183,10 @@ function HomePage(props) {
                                   fullWidth
                                   variant="contained"
                                   color="primary"
-                                  onClick={()=>{JoinRoom()}}
                             >
                                   Join Now
                             </Button>
+                        </form>
                       </Grid>
                     </Grid>
                 </Paper>
@@ -209,12 +198,7 @@ function HomePage(props) {
 
 const Home = props => (
     <SocketContext.Consumer>
-      {socket =>
-        <React.Fragment>
-          <ButtonAppBar />
-          <HomePage {...props} socket={socket} />
-        </React.Fragment>
-      }
+      {socket => <HomePage {...props} socket={socket} />}
     </SocketContext.Consumer>
 )
 

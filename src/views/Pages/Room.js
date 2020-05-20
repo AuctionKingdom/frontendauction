@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useParams, useLocation , useHistory} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
@@ -11,8 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 function RoomPage(props){
 
-    let history = useHistory();
-    let location = useLocation();
     let { slug } = useParams();
     const [currentPlayer,changePlayer] = useState(null);
     const [currentBid, changeCurrentBid] = useState(null);
@@ -26,17 +24,6 @@ function RoomPage(props){
             },
         });
 
-    useEffect(()=>{
-
-        let token = localStorage.getItem('jwt');
-        if(location.state === undefined){
-            history.push('/',{previousLocation:location.pathname});
-        }
-        else if(location.state.prevLocation === '/signin/'){
-            props.socket.emit('LinkAdd',{'roomId':slug,'token':token})
-        }
-
-    })
 
     useEffect(()=>{
 
@@ -56,7 +43,7 @@ function RoomPage(props){
 
     useEffect(()=>{
 
-        props.socket.emit('increaseBid',{'roomId':slug,'bid':YourBid})
+        props.socket.emit('increaseBid',{'roomName':slug,'bid':YourBid})
 
     },[YourBid,props.socket])
 

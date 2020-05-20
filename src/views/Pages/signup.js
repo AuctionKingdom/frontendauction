@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Typing from 'react-typing-animation';
 import Container from '@material-ui/core/Container';
 import Slide from '@material-ui/core/Slide';
 import {signup} from '../../Auth/userauth';
@@ -78,16 +79,18 @@ function SignUp(){
       <Container component="main" maxWidth="xs">
         <CssBaseline />   {/* compulsary */}
         <div className = {classes.paper}>
+        <Typing>
           <Typography variant="h4" component="h2">
             {title}
           </Typography>
+        </Typing>
 
         <br></br>
 
         <Grid container justify="center" spacing={2}>
 
             <Grid item>
-                <Button variant={location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.replace('/signin')}>Sign In</Button>
+                <Button variant={location.pathname === '/signin' ? "contained" : "outlined" } color="primary" onClick={() => history.push('/signin')}>Sign In</Button>
             </Grid>
             <Grid item>
               <Button variant={location.pathname === '/signup' ? "contained" : "outlined" } color="primary" >Sign Up</Button>

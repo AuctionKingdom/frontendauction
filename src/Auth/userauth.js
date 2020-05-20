@@ -29,36 +29,6 @@ export const signin = async(user) => {
     .catch(err => console.log(err))
 }
 
-export const jwtauth = async(jwt)=>{
-
-    return await fetch(`${process.env.REACT_APP_API_URL}/jwt`,{
-      method:"POST",
-      headers:{
-        Accept:"application/json",
-        "content-type":"application/json"
-      },
-      body:jwt
-    })
-    .then(response => {
-        return response.json()
-    })
-    .catch(err=>console.log(err))
-
-}
-
-
-export const signout = async()=>{
-
-    return await fetch(`${process.env.REACT_APP_API_URL}/signout`,{
-      method:"GET",
-      header:{
-        Accept:"application/json",
-        "content-type":"application/json"
-      }
-    })
-
-}
-
 export const authenticate =  (jwt,next) => {
     if(typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(jwt))
