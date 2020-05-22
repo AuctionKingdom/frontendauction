@@ -7,9 +7,6 @@ import SocketContext from '../../socket-context.js';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
 import {jwtauth} from '../../Auth/userauth';
 import ButtonAppBar from '../../components/nav.js';
 
@@ -33,10 +30,7 @@ function HomePage(props) {
   let jwtToken = localStorage.getItem('jwt');
   let location = useLocation();
   let history = useHistory();
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [errModal,seterrModal] = useState(null);
-  const [roomId,setRoomId] = useState(null);
+  const [roomId,setRoomId] = useState("");
 
   /**
       Creating room and on success you will be redirected to the corresponding room
@@ -48,8 +42,7 @@ function HomePage(props) {
         jwtauth(jwtToken)
                .then( data =>{
                     if(data.error){
-                        seterrModal("Invalid JWT");
-                        setOpen(true);
+                        alert(data.error)
                         localStorage.removeItem('jwt');
                         setTimeout(()=>{
                           console.log(location.pathname);
@@ -61,16 +54,14 @@ function HomePage(props) {
                     }
                })
     }else if(location.state === undefined){
-        seterrModal("Please Login");
-        setOpen(true);
+        alert('Please Login')
 
         setTimeout(()=>{
             console.log(location.pathname);
             history.push('/',{previousLocation:location.pathname})
         },1500);
     }else if(location.state.Auth === false){
-        seterrModal("Not Authenticated");
-        setOpen(true);
+        alert('Not Authenticated')
 
         setTimeout(()=>{
             history.push('/',{previousLocation:location.pathname});
@@ -86,8 +77,7 @@ function HomePage(props) {
       })
 
       props.socket.on('failure',data=>{
-           seterrModal(data);
-           setOpen(true);
+           alert(data)
       })
   })
 
@@ -112,9 +102,7 @@ function HomePage(props) {
 
   }
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+
 
   /**
     JoinRoom is different as it gets the form input for the roomId to join
@@ -124,33 +112,14 @@ function HomePage(props) {
 
   function JoinRoom(){
 
-      props.socket.emit('Join Room',{'roomId':roomId,'token':jwtToken})
+      props.socket.emit('Join Room',{roomId:roomId,token:jwtToken})
 
   }
 
 
+
   return (
     <div style={{marginTop:'5%'}}>
-
-      <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          className={classes.modal}
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-            <Fade in={open}>
-              <div className={classes.paper}>
-                <h2 id="transition-modal-title">Error</h2>
-                <p id="transition-modal-description">{errModal}</p>
-              </div>
-            </Fade>
-      </Modal>
 
 
        <Grid container
