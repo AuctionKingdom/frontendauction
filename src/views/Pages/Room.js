@@ -1,21 +1,36 @@
 import React, {useEffect, useState} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useLocation , useHistory} from 'react-router-dom';
 import Grid  from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 
 toast.configure();
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    maxWidth: 345,
+  },
+  media:{
+    height:0,
+    paddingTop:'56.25%',
+  }
+}));
+
+
 function RoomPage(props){
 
+    const classes = useStyles();
     let history = useHistory();
     let location = useLocation();
     let { slug } = useParams();
@@ -42,11 +57,21 @@ function RoomPage(props){
         }
 
         props.socket.on('failure',data=>{
+            alert(data)
             history.replace('/');
+        })
+
+        props.socket.on('success',data=>{
+            alert(data);
         })
 
         token = JSON.parse(token);
         setEmail(token.user.email)
+
+        return()=>{
+          props.socket.off('failure')
+          props.socket.off('success')
+        }
 
     },[])
 
@@ -61,17 +86,20 @@ function RoomPage(props){
 
         props.socket.on('newPlayer',data=>{
             changePlayer(data);
-            toast('Auction: New Player')
+            changeBid(yourBid => 0);
         })
 
         props.socket.on('newBid',data=>{
             changePlayer(data);
-            toast('Auction: Increase in Bid')
         })
 
 
+        return ()=>{
+          props.socket.off('newPlayer');
+          props.socket.off('newBid');
+        }
 
-    },[currentPlayer, seconds, props.socket]);
+    },[currentPlayer, yourBid]);
 
 
     /**
@@ -107,6 +135,8 @@ function RoomPage(props){
         props.socket.on('people',data=>{
               setUsers(data);
         })
+
+        return ()=>{ props.socket.off('data') }
     })
 
     /**
@@ -117,25 +147,10 @@ function RoomPage(props){
         props.socket.on('Begin timeout',data=>{
             toast('10s more ...Please Decide sooner')
         })
+
+        return ()=>{ props.socket.off('Begin timeout')}
     })
 
-
-    /**
-        Timer indicating the user a bid hasnt been made in the last 20s, and it could
-        lead to closing of the current player
-    */
-
-    useEffect(() => {
-
-      if (isActive) {
-        setTimeout(()=>{
-          setSeconds(seconds => seconds-1);
-        },1000)
-      }else{
-          setSeconds(seconds => 10);
-      }
-
-    });
 
 
     /**
@@ -146,7 +161,7 @@ function RoomPage(props){
       if (users) {
           return Object.keys(users).map((key) => {
               return (
-                  <Grid item>
+                  <Grid item xs={12}>
                       <Card>
                               <CardContent>
                                 <Typography gutterBottom variant="body2" component="p">
@@ -169,31 +184,40 @@ function RoomPage(props){
 
         <Grid container direction="column" justify="center" alignContent="center" spacing={5} style={{marginTop:'5%'}}>
 
-            <Grid item xs={12} md={12}>
-                Current Player: {currentPlayer.player}<br />
-                Current Bid: { currentPlayer.currentBid}<br />
-                Highest Bidder: { currentPlayer.highestBidder} <br />
-                Base Price: { currentPlayer.base } <br />
-                Your Bid: {yourBid}
+            {currentPlayer!=={}?(
+            <Grid item md={12} xs={12}>
+                <Card className={classes.root}>
+                    <CardHeader
+                      title= { currentPlayer.player }
+                      subheader= { currentPlayer.type }
+                    />
+                    <CardMedia
+                      className={ classes.media }
+                      image={currentPlayer.imgsrc}
+                      title={ currentPlayer.player}
+                    />
+                    <CardContent>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                          Current Bid: { currentPlayer.currentBid}<br />
+                          Highest Bidder: { users?users[currentPlayer.highestBidder]:null} <br />
+                          Base Price: { currentPlayer.base } <br />
+                      </Typography>
+                    </CardContent>
+                </Card>
             </Grid>
+          ):(
+            <Grid item md={12} xs={12}>
+              <Skeleton variant="rect" width={345} height={500} />
+            </Grid>
+          )}
 
-
-            <Grid item xs={12} md={12}>
+           <Grid item xs={12} >
                 <Button variant="contained" color="primary" onClick={()=>{makeBid()}} >
                     Bid
                 </Button>
             </Grid>
-            <Grid item xs={6} md={12}>
-                <Grid container
-                      direction="row"
-                      justify="center"
-                      alignItems="center"
-                      spacing={2}
-                >
-                  {renderUser()}
-                </Grid>
+            {renderUser()}
             </Grid>
-         </Grid>
        )
 
 }
