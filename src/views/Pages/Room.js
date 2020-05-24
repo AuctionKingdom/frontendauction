@@ -165,7 +165,7 @@ function RoomPage(props){
                       <Card>
                               <CardContent>
                                 <Typography gutterBottom variant="body2" component="p">
-                                    {key}:{users[key]}
+                                    {key}:{JSON.parse(users[key])['name']}
                                 </Typography>
                               </CardContent>
                       </Card>
