@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import * as Constants from './components/constants';
+import SocketContext from './socket-context';
+import socketIOClient from 'socket.io-client';
+import MainRouter from './routes.js';
+import { MuiThemeProvider, createMuiTheme  } from '@material-ui/core/styles';
+
+
+const THEME = createMuiTheme({
+  typography: {
+   "fontFamily": `"Raleway", sans-serif`,
+   "fontSize": 12,
+   "fontWeightLight": 300,
+   "fontWeightRegular": 400,
+   "fontWeightMedium": 500
+  }
+});
+
+
+const socket = socketIOClient(Constants.socketlink);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  return(
+    <SocketContext.Provider value={socket}>
+        <MuiThemeProvider theme={THEME}>
+                 <MainRouter />
+      </MuiThemeProvider>
+    </SocketContext.Provider>
+  )
+
 }
+
 
 export default App;
