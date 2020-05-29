@@ -1,29 +1,47 @@
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useLocation , useHistory} from 'react-router-dom';
-import Grid  from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import SocketContext from '../../socket-context.js';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Skeleton from '@material-ui/lab/Skeleton';
-
+import PlayerDetails from '../../components/PlayerDetails';
+import { Typography, Button, Grid, Paper} from '@material-ui/core';
+import UserExpand from '../../components/UserExpand';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import TrendingDownIcon from '@material-ui/icons/TrendingDown';
+import ResponsiveDrawer from '../../components/ResponsiveDrawer';
 
 
 toast.configure();
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    fontFamily:`Arial, Helvetica, sans-serif`,
+    flexGrow: 1,
+    overflow:'hidden'
   },
-  media:{
-    height:0,
-    paddingTop:'56.25%',
+  player: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    backgroundImage:`url('https://image.shutterstock.com/image-photo/stadium-lights-flashes-3d-260nw-600464927.jpg')`,
+    backgroundSize:'cover',
+    backgroundPosition:'center',
+  },
+  paper:{
+
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    textAlign:'center',
+    color: theme.palette.text.primary,
+  },
+  image:{
+    display: 'inline-block',
+    width: '150px',
+    height: '150px',
+    borderRadius: '50%',
+    objectFit: 'cover',
   }
 }));
 
@@ -37,10 +55,9 @@ function RoomPage(props){
     const [currentPlayer,changePlayer] = useState({});
     const [yourBid, changeBid] = useState(0);
     const [users,setUsers] = useState(null);
-    const [ isActive, setActive ]  = useState(false);
-    const [ seconds, setSeconds ]  = useState(10);
-    const [ email, setEmail ] = useState("");
-
+    const [disable,setDisable] = useState(false)
+    const [playerList, setPlayerList] = useState({});
+    const [allPlayers, setPlayers] = useState([]);
     /**
 
     */
@@ -62,18 +79,15 @@ function RoomPage(props){
         })
 
         props.socket.on('success',data=>{
-            alert(data);
+            toast('Success')
         })
-
-        token = JSON.parse(token);
-        setEmail(token.user.email)
 
         return()=>{
           props.socket.off('failure')
           props.socket.off('success')
         }
 
-    },[])
+    },[history, location, props.socket, slug])
 
     /**
        newPlayer: Current Player in the bidding process
@@ -87,6 +101,7 @@ function RoomPage(props){
         props.socket.on('newPlayer',data=>{
             changePlayer(data);
             changeBid(yourBid => 0);
+            setDisable(false);
         })
 
         props.socket.on('newBid',data=>{
@@ -99,7 +114,7 @@ function RoomPage(props){
           props.socket.off('newBid');
         }
 
-    },[currentPlayer, yourBid]);
+    },[currentPlayer, yourBid, props.socket, disable]);
 
 
     /**
@@ -108,13 +123,13 @@ function RoomPage(props){
 
     useEffect(()=>{
 
-      if(yourBid !== 0){
+      if(yourBid !== 0 && yourBid){
         let jwtToken = JSON.parse(localStorage.getItem('jwt'));
         props.socket.emit('Bid',{roomId:slug,bid:yourBid,email:jwtToken.user.email})
       }
 
 
-    },[yourBid])
+    },[yourBid, props.socket, slug])
 
 
     function makeBid(){
@@ -136,7 +151,19 @@ function RoomPage(props){
               setUsers(data);
         })
 
-        return ()=>{ props.socket.off('data') }
+        props.socket.on('playerList',data=>{
+              setPlayerList(data);
+        })
+
+        props.socket.on('availablePlayers',data=>{
+              setPlayers(data);
+        })
+
+        return ()=>{
+          props.socket.off('data');
+          props.socket.off('playerList');
+          props.socket.off('availablePlayers');
+        }
     })
 
     /**
@@ -152,72 +179,64 @@ function RoomPage(props){
     })
 
 
-
-    /**
-        Rendering the user Card: Need to Improve
-    */
-
-    function renderUser(){
-      if (users) {
-          return Object.keys(users).map((key) => {
-              return (
-                  <Grid item xs={12}>
-                      <Card>
-                              <CardContent>
-                                <Typography gutterBottom variant="body2" component="p">
-                                    {key}:{JSON.parse(users[key])['name']}
-                                </Typography>
-                              </CardContent>
-                      </Card>
-                  </Grid>
-              );
-          });
-        } else {
-            return <p>No Users Available</p>;
-        }
-    }
-
-
-
-
     return(
 
-        <Grid container direction="column" justify="center" alignContent="center" spacing={5} style={{marginTop:'5%'}}>
+      <React.Fragment>
+          <ResponsiveDrawer allPlayers={allPlayers} playerList ={playerList}/>
+          <div className={classes.root}>
+          <Grid container spacing={1} style={{ padding:'1em'}}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                  <Grid item xs={12} md={6}>
+                      <Paper className={classes.player}>
+                          <img src={currentPlayer.imgsrc} alt='PlayerImage' className={classes.image} />
+                      </Paper>
+                  </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container spacing={1}>
+              <Grid item xs={12}>
+                  <Grid container justify="center">
+                      <Grid item xs={6} md={3}>
+                          <div className={classes.paper}>
+                              <Typography variant="body1" component="p">
+                                  <b>{currentPlayer.player}</b>
+                              </Typography>
+                              <PlayerDetails player={currentPlayer} users={users}/>
+                          </div>
+                      </Grid>
 
-            {currentPlayer!=={}?(
-            <Grid item md={12} xs={12}>
-                <Card className={classes.root}>
-                    <CardHeader
-                      title= { currentPlayer.player }
-                      subheader= { currentPlayer.type }
-                    />
-                    <CardMedia
-                      className={ classes.media }
-                      image={currentPlayer.imgsrc}
-                      title={ currentPlayer.player}
-                    />
-                    <CardContent>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                          Current Bid: { currentPlayer.currentBid}<br />
-                          Highest Bidder: { users?users[currentPlayer.highestBidder]:null} <br />
-                          Base Price: { currentPlayer.base } <br />
-                      </Typography>
-                    </CardContent>
-                </Card>
+                      <Grid item xs={6} md={3}>
+                        <div className={classes.paper}  style={{marginTop:'3em'}}>
+                            <Button type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    disabled = {disable}
+                                    endIcon={<TrendingUpIcon />}
+                                    onClick = {()=>{makeBid()}}
+                            >
+                              Bid
+                            </Button>
+                            <Button type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    size="large"
+                                    endIcon={<TrendingDownIcon />}
+                                    style={{margin:10}}
+                                    onClick={()=>{setDisable(true)}}
+                            >
+                              Pass
+                            </Button>
+                            <UserExpand users={users} playerList={playerList}/>
+                        </div>
+                      </Grid>
+                  </Grid>
+                </Grid>
             </Grid>
-          ):(
-            <Grid item md={12} xs={12}>
-              <Skeleton variant="rect" width={345} height={500} />
-            </Grid>
-          )}
-
-           <Grid item xs={12} >
-                <Button variant="contained" color="primary" onClick={()=>{makeBid()}} >
-                    Bid
-                </Button>
-            </Grid>
-            {renderUser()}
-            </Grid>
+          </div>
+        </React.Fragment>
        )
 
 }

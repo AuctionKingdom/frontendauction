@@ -6,23 +6,9 @@ import { useHistory , useLocation } from 'react-router-dom';
 import SocketContext from '../../socket-context.js';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
 import {jwtauth} from '../../Auth/userauth';
 import ButtonAppBar from '../../components/nav.js';
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-}));
 
 
 function HomePage(props) {
@@ -41,14 +27,14 @@ function HomePage(props) {
     if(jwtToken !== null){
         jwtauth(jwtToken)
                .then( data =>{
-                    if(data.error){
+                    if(data && data.error){
                         alert(data.error)
                         localStorage.removeItem('jwt');
                         setTimeout(()=>{
                           console.log(location.pathname);
                           history.push('/',{previousLocation:location.pathname})
                         },1500);
-                    }else{
+                    }else if(data){
                         location.state = {}
                         location.state.Auth = true;
                     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, BrowserRouter, Switch, Route } from "react-router-dom";
+import {BrowserRouter, Switch, Route } from "react-router-dom";
 
 //import App from './App';
 const loading = () => <div>Loading...</div>;
@@ -21,20 +21,5 @@ const MainRouter = () => (
                 </React.Suspense>
            </BrowserRouter>
 )
-
-
-// Private Route to check for authentication
-
-function PrivateRoute ({component: Component, authed, ...rest}) {
-  return (
-    <Route
-      {...rest}
-      render={(props) => authed === true
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-    />
-  )
-}
-
 
 export default MainRouter;
