@@ -10,7 +10,8 @@ import UserExpand from '../../components/UserExpand';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import ResponsiveDrawer from '../../components/ResponsiveDrawer';
-
+import {PDFDownloadLink} from '@react-pdf/renderer';
+import { PdfDocument } from '../../components/PdfGeneration';
 
 toast.configure();
 
@@ -58,6 +59,7 @@ function RoomPage(props){
     const [disable,setDisable] = useState(false)
     const [playerList, setPlayerList] = useState({});
     const [allPlayers, setPlayers] = useState([]);
+    const [show, setShow] = useState(false);
     /**
 
     */
@@ -65,6 +67,7 @@ function RoomPage(props){
     useEffect(()=>{
 
         let token = localStorage.getItem('jwt');
+
         if(location.state === undefined){
             history.push('/',{previousLocation:location.pathname});
         }
@@ -153,6 +156,7 @@ function RoomPage(props){
 
         props.socket.on('playerList',data=>{
               setPlayerList(data);
+              setShow(true);
         })
 
         props.socket.on('availablePlayers',data=>{
@@ -232,6 +236,27 @@ function RoomPage(props){
                             <UserExpand users={users} playerList={playerList}/>
                         </div>
                       </Grid>
+                  </Grid>
+                </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Grid container justify="center">
+                      {show && <PDFDownloadLink
+                          document={<PdfDocument users={users} playerList={playerList}/>}
+                          fileName="game.pdf"
+                          style={{
+                            textDecoration: "none",
+                            padding: "10px",
+                            color: "#4a4a4a",
+                            backgroundColor: "#f2f2f2",
+                            border: "1px solid #4a4a4a"
+                          }}
+                        >
+                          {({ blob, url, loading, error }) =>
+                            loading ? "Loading document..." : "Download Pdf"
+                          }
+                        </PDFDownloadLink>}
                   </Grid>
                 </Grid>
             </Grid>

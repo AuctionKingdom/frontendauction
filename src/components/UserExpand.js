@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+
 
 /**
   Material UI Expansion Code
@@ -68,7 +70,7 @@ export default function UserExpand(props) {
   /**
     Render all the Player name which suits the emailId
   */
-  function renderUserList(emailId){
+  function renderPlayerList(emailId){
       if(props.playerList){
           return Object.keys(props.playerList).map((key)=>{
               if(JSON.parse(props.playerList[key])['highestBidder'] === emailId){
@@ -93,15 +95,18 @@ export default function UserExpand(props) {
      if (props.users) {
          return Object.keys(props.users).map((key) => {
              return (
-               <ExpansionPanel square expanded={expanded === `${JSON.parse(props.users[key])['name']}`} onChange={handleChange(`${JSON.parse(props.users[key])['name']}`)}>
-                 <ExpansionPanelSummary aria-controls="panel1d-content" id="panel1d-header">
-                   <Typography>{JSON.parse(props.users[key])['name']}</Typography>
-                 </ExpansionPanelSummary>
-                 <ExpansionPanelDetails>
-                   <Typography>
-                      {renderUserList(key)}
-                   </Typography>
-                 </ExpansionPanelDetails>
+               <ExpansionPanel square expanded={expanded === `${JSON.parse(props.users[key])['name']}`}
+                                      onChange={handleChange(`${JSON.parse(props.users[key])['name']}`)}>
+                     <ExpansionPanelSummary aria-cont rols="panel1d-content" id="panel1d-header">
+                           <Typography>{JSON.parse(props.users[key])['name']} </Typography>
+                            <AccountBalanceWalletIcon style={{  marginLeft:'20%', color:'green'}} />
+                           <Typography>{JSON.parse(props.users[key])['wallet']} </Typography>
+                     </ExpansionPanelSummary>
+                     <ExpansionPanelDetails>
+                       <Typography>
+                          {renderPlayerList(key)}
+                       </Typography>
+                     </ExpansionPanelDetails>
                </ExpansionPanel>
              );
          });
