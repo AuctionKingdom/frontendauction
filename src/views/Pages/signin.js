@@ -9,8 +9,6 @@ import Container from '@material-ui/core/Container';
 import {useHistory,useLocation } from 'react-router-dom';
 import Slide from '@material-ui/core/Slide';
 import {signin,authenticate, jwtauth} from '../../Auth/userauth'
-import {useTypewriter} from 'react-typewriter-hook';
-
 
 const useStyles = makeStyles((theme)=>({
   paper: {
@@ -97,7 +95,7 @@ function SignIn(){
             //Similar logic to the one written to check for JWT but only the redirect part
             if(location.state){
                 if(location.state.previousLocation){
-                    history.push(location.state.previousLocation,{Auth:true})
+                    history.push(location.state.previousLocation,{previousLocation:'/',Auth:true})
                 }
             }else{
                 history.replace('/home',{Auth:redirectToRefer})
