@@ -19,8 +19,7 @@ toast.configure();
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    ma
-      ./xWidth: 345,
+    maxWidth: 345,
   },
   media:{
     height:0,
