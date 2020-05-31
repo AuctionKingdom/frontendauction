@@ -12,6 +12,7 @@ import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import ResponsiveDrawer from '../../components/ResponsiveDrawer';
 import {PDFDownloadLink} from '@react-pdf/renderer';
 import { PdfDocument } from '../../components/PdfGeneration';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 toast.configure();
 
@@ -188,6 +189,7 @@ function RoomPage(props){
       <React.Fragment>
           <ResponsiveDrawer allPlayers={allPlayers} playerList ={playerList}/>
           <div className={classes.root}>
+            <ExitToAppIcon fontSize="large" style={{color:'red',position:'absolute',right:0}} onClick = {()=>{history.replace('/home',{roomId:slug})}} />
           <Grid container spacing={1} style={{ padding:'1em'}}>
             <Grid item xs={12}>
               <Grid container justify="center">

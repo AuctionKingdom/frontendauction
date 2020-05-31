@@ -24,7 +24,7 @@ function HomePage(props) {
 
   useEffect(()=>{
 
-    if(jwtToken !== null){
+    if(location.state === undefined && jwtToken !== null){
         jwtauth(jwtToken)
                .then( data =>{
                     if(data && data.error){
@@ -54,7 +54,13 @@ function HomePage(props) {
         },1500)
     }
 
-  },[jwtToken, location.state, location.pathname, history])
+    if(location.state){
+      if(location.state.roomId){
+        props.socket.emit('leave',{roomId:location.state.roomId})
+      }
+    }
+
+  },[jwtToken, location.state, location.pathname, history, props.socket])
 
   useEffect(()=>{
 
