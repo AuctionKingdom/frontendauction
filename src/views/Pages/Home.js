@@ -17,6 +17,7 @@ function HomePage(props) {
   let location = useLocation();
   let history = useHistory();
   const [roomId,setRoomId] = useState("");
+  const [roomsize, setRoomSize] = useState(0);
 
   /**
       Creating room and on success you will be redirected to the corresponding room
@@ -90,7 +91,7 @@ function HomePage(props) {
 
   function createRoom(){
 
-      props.socket.emit('Create Room',{token:jwtToken})
+      props.socket.emit('Create Room',{token:jwtToken,roomSize:roomsize})
 
   }
 
@@ -111,7 +112,7 @@ function HomePage(props) {
 
 
   return (
-    <div style={{marginTop:'5%'}}>
+    <div style={{marginTop:'5%',overflow:'hidden'}}>
 
 
        <Grid container
@@ -124,8 +125,8 @@ function HomePage(props) {
                 <Button variant="contained" color="primary" type="submit" onClick={()=>{playOnline()}}>Play Online </Button>
           </Grid>
 
-          <Grid item md={6} xs={10}>
-                <Paper elevation={10} style={{padding:'5%'}}>
+          <Grid item md={6} xs={10} style={{ paddingBottom:'10%'}}>
+                <Paper elevation={10} style={{padding:'5%',border:'1px dotted black'}}>
                     <Typography style={{textAlign:'center'}} variant="h6" component="h6"> Play with Friends</Typography>
                     <Grid container
                           direction="column"
@@ -134,8 +135,24 @@ function HomePage(props) {
                           spacing={6}
                           style={{paddingTop:'5%'}}
                     >
-                      <Grid item md={12} xs={12} style={{borderBotton:'1px solid black'}}>
-                        <Button variant="contained" color="secondary" type="submit" onClick={()=>{createRoom()}}>Create Room</Button>
+                      <Grid item md={10} xs={10}>
+                        <TextField
+                              variant="outlined"
+                              margin="normal"
+                              required
+                              fullWidth
+                              name="RoomSize"
+                              label="RoomSize"
+                              type="text"
+                              id="roomsize"
+                              onChange={(e)=>{setRoomSize(e.target.value)}}
+                         />
+                        <Button variant="contained"
+                                fullWidth color="secondary"
+                                type="submit"
+                                onClick={()=>{createRoom()}}>
+                                Create Room
+                        </Button>
                       </Grid>
 
                       <Grid item md={10} xs={10}>
