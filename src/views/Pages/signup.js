@@ -47,7 +47,7 @@ function SignUp(){
       const [password,setPassword] = useState("");
       const [error,setError] = useState("");
       const [RedirectTo,setRedirect] = useState(false);
-      const [title,setTitle] = useState("Auction Kingdom");
+      const title = "AuctionKingdom"
 
 
   const clickSubmit = (event) => {
@@ -60,9 +60,9 @@ function SignUp(){
       console.log(user)
         signup(user)
           .then(data => {
-            if (data.error)
+            if (data && data.error)
                 setError(data.error);
-            else{
+            else if(data){
                 setError("");
                 setName("");
                 setEmail("");

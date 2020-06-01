@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import {useHistory,useLocation } from 'react-router-dom';
 import Slide from '@material-ui/core/Slide';
 import {signin,authenticate, jwtauth} from '../../Auth/userauth'
-
+  
 const useStyles = makeStyles((theme)=>({
   paper: {
     marginTop: theme.spacing(8),
@@ -37,7 +37,7 @@ function SignIn(){
   const [password,setPassword] = useState("");
   const [error,setError] = useState("");
   const [redirectToRefer,setRedirect] = useState(false);
-  const [title,setTitle]=useState("Auction Kingdom");
+  const title = "AuctionKingdom"
 
   useEffect(()=>{
 
@@ -49,13 +49,13 @@ function SignIn(){
           jwtauth(token)
                  .then( data =>{
                       //Data Error is possible only if someone corrupts JWT
-                      if(data.error){
+                      if(data && data.error){
                           setError("Invalid JWT");
                           localStorage.removeItem('jwt');
                             setTimeout(()=>{
                               history.replace('/')
                             },1500);
-                      }else{
+                      }else if(data){
                           //location state helps to say whether he has been redirected to login from a room
                           setRedirect(true);
                       }
@@ -101,7 +101,7 @@ function SignIn(){
                 history.replace('/home',{Auth:redirectToRefer})
             }
       }
-    },[redirectToRefer])
+    },[redirectToRefer, history, location])
 
   const SignInForm = () => {
 
