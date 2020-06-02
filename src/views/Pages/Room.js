@@ -102,6 +102,12 @@ function RoomPage(props){
 
     useEffect(()=>{
 
+        props.socket.emit('send',slug);
+
+    },[props.socket, slug])
+
+    useEffect(()=>{
+
         props.socket.on('newPlayer',data=>{
             changePlayer(data);
             changeBid(yourBid => 0);

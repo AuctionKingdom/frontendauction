@@ -97,7 +97,7 @@ export default function UserExpand(props) {
              return (
                <ExpansionPanel square expanded={expanded === `${JSON.parse(props.users[key])['name']}`}
                                       onChange={handleChange(`${JSON.parse(props.users[key])['name']}`)}>
-                     <ExpansionPanelSummary aria-cont rols="panel1d-content" id="panel1d-header">
+                     <ExpansionPanelSummary aria rols="panel1d-content" id="panel1d-header">
                            <Typography>{JSON.parse(props.users[key])['name']} </Typography>
                             <AccountBalanceWalletIcon style={{  marginLeft:'20%', color:'green'}} />
                            <Typography>{JSON.parse(props.users[key])['wallet']} </Typography>
