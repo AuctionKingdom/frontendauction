@@ -69,7 +69,7 @@ function SignUp() {
         <div className={classes.paper}>
           <img
             alt="logo"
-            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            src={require("../../logo.png")}
             className={classes.image}
           />
 
