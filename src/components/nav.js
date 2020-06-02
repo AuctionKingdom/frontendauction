@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   title: {
-    border: "1px solid #A29266",
-    color: "#A29266",
+    border: "1px solid #D11111",
+    color: "#D11111",
     borderRadius: "2px",
     textAlign: "center",
   },

@@ -12,10 +12,10 @@ function App() {
   const [theme, setTheme] = useState({
     palette: {
       primary: {
-        main: "#A29266",
+        main: "#D11111",
       },
       secondary: {
-        main: "#CF0036",
+        main: "#01D13B",
       },
       type: "light",
     },
@@ -35,10 +35,10 @@ function App() {
     setTheme({
       palette: {
         primary: {
-          main: "#A29266",
+          main: "#D11111",
         },
         secondary: {
-          main: "#CF0036",
+          main: "#01D13B",
         },
         type: newPaletteType,
       },

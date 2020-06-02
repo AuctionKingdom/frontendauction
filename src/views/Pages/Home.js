@@ -18,7 +18,7 @@ function HomePage(props) {
   const [roomId, setRoomId] = useState("");
   const [roomsize, setRoomSize] = useState(0);
   const Background =
-    "https://images.unsplash.com/photo-1573054501098-67cc2d55d827?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80";
+  "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=867&q=80"
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
@@ -110,7 +110,7 @@ function HomePage(props) {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "95vh",
         overflow: "hidden",
         backgroundImage: `url(${Background})`,
         backgroundSize: "cover",
@@ -134,14 +134,14 @@ function HomePage(props) {
             in={true}
             mountOnEnter
             unmountOnExit
-            timeout={{ enter: 3000, exit: 2000 }}
+            timeout={{ enter: 2000, exit: 1000 }}
           >
             <Paper
               elevation={15}
-              style={{ padding: "5%", marginTop: "20%", paddingBottom: "60px" }}
+              style={{paddingTop:'20px', marginTop: "10%", paddingBottom: "40px" }}
             >
               <Typography
-                style={{ textAlign: "center", color: "gray" }}
+                style={{ textAlign: "center", color: "grey" }}
                 variant="h6"
                 component="h6"
               >
@@ -174,6 +174,7 @@ function HomePage(props) {
 
                   <Button
                     variant="contained"
+                    fullWidth
                     color="primary"
                     type="submit"
                     onClick={() => {
@@ -201,6 +202,7 @@ function HomePage(props) {
 
                   <Button
                     type="submit"
+                    fullWidth
                     variant="contained"
                     color="primary"
                     onClick={() => {
@@ -210,15 +212,15 @@ function HomePage(props) {
                     Join Room
                   </Button>
                 </Grid>
+                <Grid item md={10} xs={10}>
+                  <Button color="secondary" variant="contained" onClick={signOut}>
+                    Leave Page
+                  </Button>
+                </Grid>
               </Grid>
             </Paper>
           </Slide>
         </Grid>
-      </Grid>
-      <Grid container justify="center" alignItems="center">
-        <Button color="secondary" variant="outlined" onClick={signOut}>
-          Leave Page
-        </Button>
       </Grid>
     </div>
   );

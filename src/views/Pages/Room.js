@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: `Arial, Helvetica, sans-serif`,
     flexGrow: 1,
     overflow: "hidden",
-    height: "100vh",
+    minHeight:window.innerHeight,
   },
   player: {
     padding: theme.spacing(2),
@@ -191,9 +191,9 @@ function RoomPage(props) {
 
   return (
     <React.Fragment>
-      <ResponsiveDrawer allPlayers={allPlayers} playerList={playerList} />
+      <ResponsiveDrawer allPlayers={allPlayers} playerList={playerList} roomId={slug} />
 
-      <Paper elevation="0">
+      <Paper elevation={2}>
         <div className={classes.root}>
           <Grid container spacing={1} style={{ padding: "1em" }}>
             <Grid item xs={12}>
@@ -219,6 +219,15 @@ function RoomPage(props) {
                       <b>{currentPlayer.player}</b>
                     </Typography>
                     <PlayerDetails player={currentPlayer} users={users} />
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => {
+                        history.replace("/home", { roomId: slug });
+                      }}
+                    >
+                      Leave Page
+                    </Button>
                   </div>
                 </Grid>
 
@@ -280,17 +289,6 @@ function RoomPage(props) {
                 )}
               </Grid>
             </Grid>
-          </Grid>
-          <Grid container justify="center" alignItems="center">
-            <Button
-              color="secondary"
-              variant="outlined"
-              onClick={() => {
-                history.replace("/home", { roomId: slug });
-              }}
-            >
-              Leave Page
-            </Button>
           </Grid>
         </div>
       </Paper>

@@ -3,9 +3,13 @@
   "name": "DreamTeam",
   "icons": [
     {
-    "src":"logo.jpeg",
-    "sizes": "300x300",
-    "type": "image/jpeg"
+    "src":"logo.png",
+    "sizes": "192x192",
+    "type": "image/png"
+    },{
+     "src":"logo.png",
+     "sizes":"512x512",
+     "type":"image/png"
     }
   ],
   "start_url": ".",

@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     display: "inline-block",
-    width: "150px",
-    height: "50px",
+    width: "200px",
+    height: "100px",
     objectFit: "cover",
   },
 }));

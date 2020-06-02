@@ -25,8 +25,8 @@ const myStyles = makeStyles((theme) => ({
   },
   image: {
     display: "inline-block",
-    width: "150px",
-    height: "50px",
+    width: "200px",
+    height: "100px",
     objectFit: "cover",
   },
 }));
@@ -149,7 +149,7 @@ function SignUp() {
               in={true}
               mountOnEnter
               unmountOnExit
-              timeout={{ enter: 2000, exit: 2000 }}
+              timeout={{ enter: 2000, exit: 1000 }}
             >
               <Button
                 type="submit"
