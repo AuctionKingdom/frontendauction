@@ -57,7 +57,7 @@ export default function ButtonAppBar(props) {
             <Grid item xs={6}>
               <img
                 alt="DreamTeam"
-                src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+                src={require("../logo.png")}
                 className={classes.image}
               />
             </Grid>

@@ -59,7 +59,7 @@ function SignIn() {
           setRedirect(true);
         }
       });
-    }
+    } 
   });
 
   const clickSubmit = (event) => {
@@ -108,7 +108,7 @@ function SignIn() {
         <div className={classes.paper}>
           <img
             alt="logo"
-            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            src={require("../../logo.png")}
             className={classes.image}
           />
 
