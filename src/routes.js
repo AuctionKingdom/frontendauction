@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Loading from "../../frontendauction/src/views/Pages/Loading";
+import Loading from "./views/Pages/Loading";
 //import App from './App';
 
 const SignIn = React.lazy(() => import("./views/Pages/signin"));
