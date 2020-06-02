@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles, Typing } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import { useHistory } from "react-router-dom";
-import { signout } from "../Auth/userauth";
+// import { useHistory } from "react-router-dom";
+//import { signout } from "../Auth/userauth";
+import Grid from "@material-ui/core/Grid";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +14,10 @@ const useStyles = makeStyles((theme) => ({
   },
 
   title: {
-    flexGrow: 1,
+    border: "1px solid #A29266",
+    color: "#A29266",
+    borderRadius: "2px",
+    textAlign: "center",
   },
   image: {
     display: "inline-block",
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar(props) {
   const classes = useStyles();
 
-  let history = useHistory();
+  // let history = useHistory();
   const [name, setName] = useState(null);
 
   useEffect(() => {
@@ -41,33 +43,35 @@ export default function ButtonAppBar(props) {
 
   //Signout feature
 
-  function signOut() {
-    localStorage.removeItem("jwt");
-    signout();
-    history.push("/");
-  }
+  // function signOut() {
+  //   localStorage.removeItem("jwt");
+  //   signout();
+  //   history.push("/");
+  // }
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <img
-            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
-            className={classes.image}
-          />
-          <Typography variant="h6" className={classes.content}>
-            {name}
-          </Typography>
-          <Button
-            color="inherit"
-            onClick={() => {
-              signOut();
-            }}
-          >
-            SignOut
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Grid container>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Grid item xs={6}>
+              <img
+                alt="DreamTeam"
+                src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+                className={classes.image}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography variant="h6" className={classes.title}>
+                {name}
+              </Typography>
+            </Grid>
+
+            <Switch onChange={props.otd}></Switch>
+          </Toolbar>
+        </AppBar>
+      </Grid>
     </div>
   );
 }

@@ -10,10 +10,10 @@ import UserExpand from "../../components/UserExpand";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import ResponsiveDrawer from "../../components/ResponsiveDrawer";
-import Switch from "@material-ui/core/Switch";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfDocument } from "../../components/PdfGeneration";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+// import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ButtonAppBar from "../../components/nav.js";
 
 toast.configure();
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: `Arial, Helvetica, sans-serif`,
     flexGrow: 1,
     overflow: "hidden",
+    height: "100vh",
   },
   player: {
     padding: theme.spacing(2),
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function RoomPage(props) {
+  console.log(props);
   const classes = useStyles();
   let history = useHistory();
   let location = useLocation();
@@ -59,9 +61,6 @@ function RoomPage(props) {
   const [playerList, setPlayerList] = useState({});
   const [allPlayers, setPlayers] = useState([]);
   const [show, setShow] = useState(false);
-  /**
-
-    */
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
@@ -109,17 +108,16 @@ function RoomPage(props) {
       changePlayer(data);
     });
 
-    props.socket.on("sold", (data)=>{
+    props.socket.on("sold", (data) => {
       toast(`${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`);
-      
-      let userData = {...users}
+
+      let userData = { ...users };
       userData[data.bidder] = JSON.stringify({
-          "name":JSON.parse(users[data.bidder])["name"],
-          "wallet":JSON.parse(users[data.bidder])["wallet"]-data.bid
+        name: JSON.parse(users[data.bidder])["name"],
+        wallet: JSON.parse(users[data.bidder])["wallet"] - data.bid,
       });
       setUsers(userData);
-       
-    })
+    });
 
     return () => {
       props.socket.off("newPlayer");
@@ -194,111 +192,121 @@ function RoomPage(props) {
   return (
     <React.Fragment>
       <ResponsiveDrawer allPlayers={allPlayers} playerList={playerList} />
-      <div className={classes.root}>
-        <ExitToAppIcon
-          fontSize="large"
-          style={{ color: "red", position: "absolute", right: 10 ,top:10}}
-          onClick={() => {
-            history.replace("/home", { roomId: slug });
-          }}
-        />
-        <Grid container spacing={1} style={{ padding: "1em" }}>
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              <Grid item xs={12} md={6}>
-                <Paper className={classes.player}>
-                  <img
-                    src={currentPlayer.imgsrc}
-                    alt="PlayerImage"
-                    className={classes.image}
-                  />
-                </Paper>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              <Grid item xs={6} md={3}>
-                <div className={classes.paper}>
-                  <Typography variant="body1" component="p">
-                    <b>{currentPlayer.player}</b>
-                  </Typography>
-                  <PlayerDetails player={currentPlayer} users={users} />
-                </div>
-              </Grid>
 
-              <Grid item xs={6} md={3}>
-                <div className={classes.paper} style={{ marginTop: "3em" }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={disable}
-                    endIcon={<TrendingUpIcon />}
-                    onClick={() => {
-                      makeBid();
-                    }}
-                  >
-                    Bid
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    endIcon={<TrendingDownIcon />}
-                    style={{ margin: 10 }}
-                    onClick={() => {
-                      setDisable(true);
-                    }}
-                  >
-                    Pass
-                  </Button>
-                  <UserExpand users={users} playerList={playerList} />
-                </div>
+      <Paper elevation="0">
+        <div className={classes.root}>
+          <Grid container spacing={1} style={{ padding: "1em" }}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.player}>
+                    <img
+                      src={currentPlayer.imgsrc}
+                      alt="PlayerImage"
+                      className={classes.image}
+                    />
+                  </Paper>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              {show && (
-                <PDFDownloadLink
-                  document={
-                    <PdfDocument users={users} playerList={playerList} />
-                  }
-                  fileName="game.pdf"
-                  style={{
-                    textDecoration: "none",
-                    padding: "10px",
-                    color: "#4a4a4a",
-                    backgroundColor: "#f2f2f2",
-                    border: "1px solid #4a4a4a",
-                  }}
-                >
-                  {({ blob, url, loading, error }) =>
-                    loading ? "Loading document..." : "Download Pdf"
-                  }
-                </PDFDownloadLink>
-              )}
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Grid item xs={6} md={3}>
+                  <div className={classes.paper}>
+                    <Typography variant="body1" component="p">
+                      <b>{currentPlayer.player}</b>
+                    </Typography>
+                    <PlayerDetails player={currentPlayer} users={users} />
+                  </div>
+                </Grid>
+
+                <Grid item xs={6} md={3}>
+                  <div className={classes.paper} style={{ marginTop: "3em" }}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      disabled={disable}
+                      endIcon={<TrendingUpIcon />}
+                      onClick={() => {
+                        makeBid();
+                      }}
+                    >
+                      Bid
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="secondary"
+                      size="large"
+                      endIcon={<TrendingDownIcon />}
+                      style={{ margin: 10 }}
+                      onClick={() => {
+                        setDisable(true);
+                      }}
+                    >
+                      Pass
+                    </Button>
+                    <UserExpand users={users} playerList={playerList} />
+                  </div>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </div>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                {show && (
+                  <PDFDownloadLink
+                    document={
+                      <PdfDocument users={users} playerList={playerList} />
+                    }
+                    fileName="game.pdf"
+                    style={{
+                      textDecoration: "none",
+                      padding: "10px",
+                      color: "#4a4a4a",
+                      backgroundColor: "#f2f2f2",
+                      border: "1px solid #4a4a4a",
+                    }}
+                  >
+                    {({ blob, url, loading, error }) =>
+                      loading ? "Loading document..." : "Download Pdf"
+                    }
+                  </PDFDownloadLink>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container justify="center" alignItems="center">
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={() => {
+                history.replace("/home", { roomId: slug });
+              }}
+            >
+              Leave Page
+            </Button>
+          </Grid>
+        </div>
+      </Paper>
     </React.Fragment>
   );
 }
 
-const Room = (props) => {
-  return (
-    <SocketContext.Consumer>
-      {(socket) => <RoomPage {...props} socket={socket} />}
-    </SocketContext.Consumer>
-  );
-};
+const Room = (props) => (
+  <SocketContext.Consumer>
+    {(socket) => (
+      <React.Fragment>
+        <ButtonAppBar {...props} />
+        <RoomPage {...props} socket={socket} />
+      </React.Fragment>
+    )}
+  </SocketContext.Consumer>
+);
 
 export default Room;

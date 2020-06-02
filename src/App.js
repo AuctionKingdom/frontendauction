@@ -5,13 +5,18 @@ import SocketContext from "./socket-context";
 import socketIOClient from "socket.io-client";
 import MainRouter from "./routes.js";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import lightBlue from "@material-ui/core/colors/lightBlue";
 
 const socket = socketIOClient(Constants.socketlink);
 
 function App() {
   const [theme, setTheme] = useState({
     palette: {
+      primary: {
+        main: "#A29266",
+      },
+      secondary: {
+        main: "#CF0036",
+      },
       type: "light",
     },
     typography: {
@@ -29,6 +34,12 @@ function App() {
     let newPaletteType = theme.palette.type === "light" ? "dark" : "light";
     setTheme({
       palette: {
+        primary: {
+          main: "#A29266",
+        },
+        secondary: {
+          main: "#CF0036",
+        },
         type: newPaletteType,
       },
       typography: {

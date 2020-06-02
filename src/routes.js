@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-
+import Loading from "../../frontendauction/src/views/Pages/Loading";
 //import App from './App';
-const loading = () => <div>Loading...</div>;
 
 const SignIn = React.lazy(() => import("./views/Pages/signin"));
 const SignUp = React.lazy(() => import("./views/Pages/signup"));
@@ -14,7 +13,7 @@ const MainRouter = ({ onToggleDark }) => {
 
   return (
     <BrowserRouter>
-      <React.Suspense fallback={loading()}>
+      <React.Suspense fallback={Loading()}>
         <Switch>
           <Route exact path="/" component={SignIn} />
           <Route exact path="/signin" component={SignIn} />
