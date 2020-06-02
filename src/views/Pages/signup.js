@@ -4,30 +4,30 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Slide from "@material-ui/core/Slide";
 import { signup } from "../../Auth/userauth";
-
 import { useHistory, useLocation } from "react-router-dom";
 
 const myStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(6),
+    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    border: "1px solid red",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2, 0),
+    margin: theme.spacing(3, 0, 2),
+  },
+  image: {
+    display: "inline-block",
+    width: "150px",
+    height: "50px",
+    objectFit: "cover",
   },
 }));
 
@@ -41,7 +41,6 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [RedirectTo, setRedirect] = useState(false);
-  const title = "AuctionKingdom";
 
   const clickSubmit = (event) => {
     event.preventDefault();
@@ -68,11 +67,11 @@ function SignUp() {
       <Container component="main" maxWidth="xs">
         <CssBaseline /> {/* compulsary */}
         <div className={classes.paper}>
-          <Typography variant="h4" component="h2">
-            {title}
-          </Typography>
-
-          <br></br>
+          <img
+            alt="logo"
+            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            className={classes.image}
+          />
 
           <Grid container justify="center" spacing={2}>
             <Grid item>
@@ -98,13 +97,15 @@ function SignUp() {
             </Grid>
           </Grid>
 
+          <br></br>
+
           <form classname={classes.form}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   onChange={(e) => setName(e.target.value)}
                   autoComplete="name"
-                  name="userName"
+                  name="Nick Name"
                   variant="outlined"
                   required
                   fullWidth
@@ -143,7 +144,13 @@ function SignUp() {
                 />
               </Grid>
             </Grid>
-            <Slide direction="up" in={true} mountOnEnter unmountOnExit>
+            <Slide
+              direction="up"
+              in={true}
+              mountOnEnter
+              unmountOnExit
+              timeout={{ enter: 2000, exit: 2000 }}
+            >
               <Button
                 type="submit"
                 fullWidth
@@ -157,7 +164,6 @@ function SignUp() {
             </Slide>
           </form>
         </div>
-        <hr />
         <div style={{ display: error ? "" : "none" }}>{error}</div>
       </Container>
     );

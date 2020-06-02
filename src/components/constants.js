@@ -1,1 +1,1 @@
-export const socketlink = 'https://auctionking.herokuapp.com/';
+export const socketlink = "https://auctionking.herokuapp.com/";

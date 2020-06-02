@@ -8,6 +8,8 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import { jwtauth } from "../../Auth/userauth";
 import ButtonAppBar from "../../components/nav.js";
+import Slide from "@material-ui/core/Slide";
+import { signout } from "../../Auth/userauth";
 
 function HomePage(props) {
   let jwtToken = localStorage.getItem("jwt");
@@ -15,7 +17,8 @@ function HomePage(props) {
   let history = useHistory();
   const [roomId, setRoomId] = useState("");
   const [roomsize, setRoomSize] = useState(0);
-
+  const Background =
+    "https://images.unsplash.com/photo-1573054501098-67cc2d55d827?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80";
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
@@ -67,13 +70,17 @@ function HomePage(props) {
     });
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   /**
     Emitting playonline and waiting for a success to redirect to the required room
     Failure maybe due to server inavailability
   */
-  function playOnline() {
-    props.socket.emit("PlayOnline", { token: jwtToken });
-  }
+  // function playOnline() {
+  //   props.socket.emit("PlayOnline", { token: jwtToken });
+  // }
 
   /**
     Emitting createRoom which is similar to playonline --> Online click and wait for redirect
@@ -94,105 +101,124 @@ function HomePage(props) {
     props.socket.emit("Join Room", { roomId: roomId, token: jwtToken });
   }
 
+  function signOut() {
+    localStorage.removeItem("jwt");
+    signout();
+    history.push("/");
+  }
+
   return (
-    <div style={{ marginTop: "5%", overflow: "hidden" }}>
+    <div
+      style={{
+        height: "100vh",
+        overflow: "hidden",
+        backgroundImage: `url(${Background})`,
+        backgroundSize: "cover",
+      }}
+    >
       <Grid
         container
         direction="row"
         justify="center"
         alignItems="center"
         spacing={5}
+        style={{}}
       >
-        <Grid item md={4} xs={4}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            onClick={() => {
-              playOnline();
-            }}
-          >
-            Play Online{" "}
-          </Button>
-        </Grid>
+        {/* <Grid item md={4} xs={4}>
+                <Button variant="contained" color="primary" type="submit" onClick={()=>{playOnline()}}>Play Online </Button>
+          </Grid> */}
 
-        <Grid item md={6} xs={10} style={{ paddingBottom: "10%" }}>
-          <Paper
-            elevation={10}
-            style={{ padding: "5%", border: "1px dotted black" }}
+        <Grid item md={6} xs={10}>
+          <Slide
+            direction="up"
+            in={true}
+            mountOnEnter
+            unmountOnExit
+            timeout={{ enter: 3000, exit: 2000 }}
           >
-            <Typography
-              style={{ textAlign: "center" }}
-              variant="h6"
-              component="h6"
+            <Paper
+              elevation={15}
+              style={{ padding: "5%", marginTop: "20%", paddingBottom: "60px" }}
             >
-              {" "}
-              Play with Friends
-            </Typography>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              spacing={6}
-              style={{ paddingTop: "5%" }}
-            >
-              <Grid item md={10} xs={10}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="RoomSize"
-                  label="RoomSize"
-                  type="text"
-                  id="roomsize"
-                  onChange={(e) => {
-                    setRoomSize(e.target.value);
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  fullWidth
-                  color="secondary"
-                  type="submit"
-                  onClick={() => {
-                    createRoom();
-                  }}
-                >
-                  Create Room
-                </Button>
-              </Grid>
+              <Typography
+                style={{ textAlign: "center", color: "gray" }}
+                variant="h6"
+                component="h6"
+              >
+                {" "}
+                Play with Friends
+              </Typography>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                spacing={6}
+                style={{ paddingTop: "5%" }}
+              >
+                <Grid item md={10} xs={10}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="RoomSize"
+                    label="RoomSize"
+                    type="number"
+                    id="roomsize"
+                    pattern="\d*"
+                    onChange={(e) => {
+                      setRoomSize(e.target.value);
+                    }}
+                  />
 
-              <Grid item md={10} xs={10}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="RoomID"
-                  label="RoomID"
-                  type="text"
-                  id="roomID"
-                  onChange={(e) => {
-                    setRoomId(e.target.value);
-                  }}
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={() => {
-                    JoinRoom();
-                  }}
-                >
-                  Join Now
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    onClick={() => {
+                      createRoom();
+                    }}
+                  >
+                    Create Room
+                  </Button>
+                </Grid>
+
+                <Grid item md={10} xs={10}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="RoomID"
+                    label="RoomID"
+                    type="text"
+                    id="roomID"
+                    onChange={(e) => {
+                      setRoomId(e.target.value);
+                    }}
+                  />
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      JoinRoom();
+                    }}
+                  >
+                    Join Room
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          </Slide>
         </Grid>
+      </Grid>
+      <Grid container justify="center" alignItems="center">
+        <Button color="secondary" variant="outlined" onClick={signOut}>
+          Leave Page
+        </Button>
       </Grid>
     </div>
   );
@@ -202,7 +228,7 @@ const Home = (props) => (
   <SocketContext.Consumer>
     {(socket) => (
       <React.Fragment>
-        <ButtonAppBar />
+        <ButtonAppBar {...props} />
         <HomePage {...props} socket={socket} />
       </React.Fragment>
     )}

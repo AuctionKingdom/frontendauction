@@ -12,12 +12,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     height: "100%",
+    marginBottom: "10px",
   },
   list: {
     marginTop: 10,
     display: "flex",
     borderRadius: "10px",
-    boxShadow: "1px 5px 10px #888888",
+    boxShadow: "0px 3px 10px #888888",
+    padding: "10px",
+    marginRight: "10px",
   },
 }));
 
@@ -51,7 +54,7 @@ export default function PlayerDetails(props) {
         <ListItemAvatar>
           <GavelIcon style={{ color: "brown" }} />
         </ListItemAvatar>
-        <ListItemText primary="HighestBidder" secondary={name} />
+        <ListItemText primary="MaxBidder" secondary={name} />
       </ListItem>
       <ListItem className={classes.list}>
         <ListItemAvatar>

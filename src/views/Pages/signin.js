@@ -3,7 +3,6 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory, useLocation } from "react-router-dom";
@@ -24,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  image: {
+    display: "inline-block",
+    width: "150px",
+    height: "50px",
+    objectFit: "cover",
+  },
 }));
 
 function SignIn() {
@@ -35,7 +40,6 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [redirectToRefer, setRedirect] = useState(false);
-  const title = "AuctionKingdom";
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
@@ -102,9 +106,11 @@ function SignIn() {
         <CssBaseline />
 
         <div className={classes.paper}>
-          <Typography variant="h4" component="h2">
-            {title}
-          </Typography>
+          <img
+            alt="logo"
+            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            className={classes.image}
+          />
 
           <br></br>
 
@@ -121,6 +127,7 @@ function SignIn() {
                 Sign In
               </Button>
             </Grid>
+
             <Grid item>
               <Button
                 variant={
@@ -135,50 +142,59 @@ function SignIn() {
           </Grid>
 
           <form className={classes.form}>
-            <TextField
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={clickSubmit}
-                className={classes.submit}
-              >
-                Sign In
-              </Button>
-            </Slide>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                />
+                <TextField
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+                <Slide
+                  direction="up"
+                  in={true}
+                  mountOnEnter
+                  unmountOnExit
+                  timeout={{ enter: 2000, exit: 2000 }}
+                >
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={clickSubmit}
+                    className={classes.submit}
+                  >
+                    Sign In
+                  </Button>
+                </Slide>
+              </Grid>
+            </Grid>
           </form>
         </div>
         <br></br>
-        <hr />
         <div style={{ display: error ? "" : "none" }}>{error}</div>
       </Container>
     );
