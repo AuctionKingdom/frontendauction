@@ -31,8 +31,6 @@ export default function ButtonAppBar(props) {
   let history = useHistory();
   const [name, setName] = useState(null);
 
-  let x = { name };
-
   useEffect(() => {
     let jwtToken = localStorage.getItem("jwt");
     if (jwtToken) {
@@ -57,6 +55,17 @@ export default function ButtonAppBar(props) {
             src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
             className={classes.image}
           />
+          <Typography variant="h6" className={classes.content}>
+            {name}
+          </Typography>
+          <Button
+            color="inherit"
+            onClick={() => {
+              signOut();
+            }}
+          >
+            SignOut
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

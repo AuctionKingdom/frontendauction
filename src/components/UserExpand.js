@@ -98,7 +98,7 @@ export default function UserExpand(props) {
             onChange={handleChange(`${JSON.parse(props.users[key])["name"]}`)}
           >
             <ExpansionPanelSummary
-              aria-cont
+              aria
               rols="panel1d-content"
               id="panel1d-header"
             >
