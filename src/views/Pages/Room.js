@@ -109,11 +109,24 @@ function RoomPage(props) {
       changePlayer(data);
     });
 
+    props.socket.on("sold", (data)=>{
+      toast(`${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`);
+      
+      let userData = {...users}
+      userData[data.bidder] = JSON.stringify({
+          "name":JSON.parse(users[data.bidder])["name"],
+          "wallet":JSON.parse(users[data.bidder])["wallet"]-data.bid
+      });
+      setUsers(userData);
+       
+    })
+
     return () => {
       props.socket.off("newPlayer");
       props.socket.off("newBid");
+      props.socket.off("sold");
     };
-  }, [currentPlayer, yourBid, props.socket, disable]);
+  }, [currentPlayer, yourBid, props.socket, users, disable]);
 
   /**
         Code submits the bid once you have improved your offer
@@ -144,7 +157,8 @@ function RoomPage(props) {
 
   useEffect(() => {
     props.socket.on("people", (data) => {
-      setUsers(data);
+      let users = data;
+      setUsers(users);
     });
 
     props.socket.on("playerList", (data) => {
@@ -183,7 +197,7 @@ function RoomPage(props) {
       <div className={classes.root}>
         <ExitToAppIcon
           fontSize="large"
-          style={{ color: "red", position: "absolute", right: 0 }}
+          style={{ color: "red", position: "absolute", right: 10 ,top:10}}
           onClick={() => {
             history.replace("/home", { roomId: slug });
           }}
