@@ -4,7 +4,7 @@
   "icons": [
     {
     "src":"logo.png",
-    "sizes": "192x192",
+    "sizes": "250x250",
     "type": "image/png"
     },{
      "src":"logo.png",
@@ -12,8 +12,8 @@
      "type":"image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "../home",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#515781"
+  "background_color": "#8b07b6"
 }

@@ -13,6 +13,7 @@ import ResponsiveDrawer from "../../components/ResponsiveDrawer";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfDocument } from "../../components/PdfGeneration";
 import Tooltip from '@material-ui/core/Tooltip';
+import Switch from '@material-ui/core/Switch';
 // import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ButtonAppBar from "../../components/nav.js";
 
@@ -231,6 +232,7 @@ function RoomPage(props) {
                     </Typography>
                     <PlayerDetails player={currentPlayer} users={users} />
                     <HtmlTooltip
+                      disableFocusListener
                       interactive
                       title={
                         <React.Fragment>
@@ -252,8 +254,11 @@ function RoomPage(props) {
                     </HtmlTooltip>
                   </div>
                 </Grid>
-
                 <Grid item xs={6} md={3}>
+                    <Typography>
+                       Toggle Dark Mode:
+                       <Switch onChange={props.otd} />
+                    </Typography>
                   <div className={classes.paper} style={{ marginTop: "3em" }}>
                     <Button
                       type="submit"
@@ -299,9 +304,9 @@ function RoomPage(props) {
                     style={{
                       textDecoration: "none",
                       padding: "10px",
-                      color: "#4a4a4a",
-                      backgroundColor: "#f2f2f2",
-                      border: "1px solid #4a4a4a",
+                      color: "white",
+                      backgroundColor: "#D11111",
+                      borderRadius:5,
                     }}
                   >
                     {({ blob, url, loading, error }) =>

@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(3),
+    position:'fixed',
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
@@ -78,7 +79,6 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid green",
                       color: "green",
                       display: "inline",
                     }}
@@ -100,7 +100,6 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid red",
                       color: "red",
                       display: "inline",
                     }}
@@ -119,8 +118,7 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid blue",
-                      color: "blue",
+                      color: "#8b07b6",
                       display: "inline",
                     }}
                   >
@@ -159,7 +157,7 @@ function ResponsiveDrawer(props) {
           onClick={handleDrawerToggle}
           className={classes.menuButton}
         >
-          <MenuIcon fontSize="large" style={{ color: "white" }} />
+          <MenuIcon fontSize="large" style={{ color: "white"}} />
         </IconButton>
       </Toolbar>
       <nav className={classes.drawer} aria-label="mailbox folders">

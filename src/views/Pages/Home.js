@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import { jwtauth } from "../../Auth/userauth";
 import ButtonAppBar from "../../components/nav.js";
 import Slide from "@material-ui/core/Slide";
+import Switch from "@material-ui/core/Switch";
 import { signout } from "../../Auth/userauth";
 
 function HomePage(props) {
@@ -141,12 +142,12 @@ function HomePage(props) {
               style={{paddingTop:'20px', marginTop: "10%", paddingBottom: "40px" }}
             >
               <Typography
-                style={{ textAlign: "center", color: "grey" }}
+                style={{ textAlign: "center" }}
                 variant="h6"
                 component="h6"
               >
-                {" "}
                 Play with Friends
+                <Switch onChange={props.otd}  />
               </Typography>
               <Grid
                 container
@@ -210,11 +211,6 @@ function HomePage(props) {
                     }}
                   >
                     Join Room
-                  </Button>
-                </Grid>
-                <Grid item md={10} xs={10}>
-                  <Button color="secondary" variant="contained" onClick={signOut}>
-                    Leave Page
                   </Button>
                 </Grid>
               </Grid>
