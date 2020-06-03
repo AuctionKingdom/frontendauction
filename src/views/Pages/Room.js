@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles} from "@material-ui/core/styles";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import SocketContext from "../../socket-context.js";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import ResponsiveDrawer from "../../components/ResponsiveDrawer";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfDocument } from "../../components/PdfGeneration";
+import Tooltip from '@material-ui/core/Tooltip';
 // import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ButtonAppBar from "../../components/nav.js";
 
@@ -47,6 +48,16 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
 }));
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 function RoomPage(props) {
   console.log(props);
@@ -219,15 +230,26 @@ function RoomPage(props) {
                       <b>{currentPlayer.player}</b>
                     </Typography>
                     <PlayerDetails player={currentPlayer} users={users} />
-                    <Button
+                    <HtmlTooltip
+                      interactive
+                      title={
+                        <React.Fragment>
+                          <Typography color="inherit">Leave the room</Typography>
+                          <em>{"Please"}</em> <b>{'Download'}</b> <u>{'the PDF'}</u>.{' '}
+                          {"It is a way to keep track of the match"}
+                        </React.Fragment>
+                      }
+                    >
+                      <Button
                       color="primary"
                       variant="contained"
                       onClick={() => {
                         history.replace("/home", { roomId: slug });
                       }}
-                    >
-                      Leave Page
+                      >
+                      Leave Room
                     </Button>
+                    </HtmlTooltip>
                   </div>
                 </Grid>
 

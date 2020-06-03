@@ -72,7 +72,7 @@ function SignIn() {
     //Call Signin function
 
     signin(user).then((data) => {
-      if (data.error) {
+      if (data && data.error) {
         setError(data.error);
       } else {
         //authenticate
