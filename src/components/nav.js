@@ -7,6 +7,8 @@ import { useHistory } from "react-router-dom";
 import { signout } from "../Auth/userauth";
 import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,9 +29,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar(props) {
   const classes = useStyles();
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
   let history = useHistory();
   const [name, setName] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     let jwtToken = localStorage.getItem("jwt");
@@ -59,19 +69,26 @@ export default function ButtonAppBar(props) {
                 className={classes.image}
               />
             </Grid>
-            <Grid item xs={3} md={6}>
+            <Grid item xs={7} md={10}>
               <Typography variant="h6">
                 DreamTeam
               </Typography>
             </Grid>
-            <Grid item xs={5} md={5}>
-              <Typography variant="h6" className={classes.title}>
-                {name}
-              </Typography>
+            <Grid item xs={2} md={1}>
+              <Button color="primary" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                Menu
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem>{name}</MenuItem>
+                <MenuItem onClick={()=>{signOut()}}>Logout</MenuItem>
+              </Menu>
             </Grid>
-            <Button variant="contained" color="primary" onClick={()=>{signOut()}}>
-              SignOut
-            </Button>
           </Toolbar>
         </AppBar>
       </Grid>
