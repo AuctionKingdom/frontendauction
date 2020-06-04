@@ -16,7 +16,7 @@ import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 const ExpansionPanel = withStyles({
   root: {
     marginTop: 10,
-    boxShadow: "1px 5px 10px #888888",
+    boxShadow: "1px 5px 10px #8b07b6",
     borderRadius: 10,
     "&:not(:last-child)": {
       borderBottom: 0,

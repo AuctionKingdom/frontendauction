@@ -89,7 +89,7 @@ function RoomPage(props) {
     });
 
     props.socket.on("success", (data) => {
-      toast("Success");
+      toast.success("Success");
     });
 
     return () => {
@@ -121,7 +121,9 @@ function RoomPage(props) {
     });
 
     props.socket.on("sold", (data) => {
-      toast(`${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`);
+      toast.success(`${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`,{
+        autoClose:2000
+      });
 
       let userData = { ...users };
       userData[data.bidder] = JSON.stringify({
@@ -193,7 +195,9 @@ function RoomPage(props) {
 
   useEffect(() => {
     props.socket.on("Begin timeout", (data) => {
-      toast("10s more ...Please Decide sooner");
+      toast.warn("10s more ...Please Decide sooner",{
+        autoClose:9000
+      });
     });
 
     return () => {

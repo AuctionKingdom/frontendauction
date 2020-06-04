@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     display: "flex",
     borderRadius: "10px",
-    boxShadow: "0px 3px 10px #888888",
+    boxShadow: "0px 3px 10px #8b07b6",
     padding: "10px",
     marginRight: "10px",
   },
