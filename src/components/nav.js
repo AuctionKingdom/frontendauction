@@ -64,14 +64,14 @@ export default function ButtonAppBar(props) {
           <Toolbar>
             <Grid item xs={3} md={1}>
               <img
-                alt="DreamTeam"
+                alt="Xtreme11"
                 src={require("../logo.png")}
                 className={classes.image}
               />
             </Grid>
             <Grid item xs={7} md={10}>
               <Typography variant="h6">
-                DreamTeam
+                Xtreme11
               </Typography>
             </Grid>
             <Grid item xs={2} md={1}>

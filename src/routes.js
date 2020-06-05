@@ -31,12 +31,6 @@ const MainRouter = ({ onToggleDark }) => {
             name="room"
             render={(props) => <Room {...props} otd={onToggleDark} />}
           />
-          <Route
-            exact="/.well-known/acme-challenge/aS2EIz2F5wCgh3dR3OEWewUXYGj6nrjigGsqiR52UXo"
-            name="acme-challenge"
-            render={()=><div>aS2EIz2F5wCgh3dR3OEWewUXYGj6nrjigGsqiR52UXo.QEcf7UmYGFMi00tW3YDVOUMIYOGk0AFe8xNhPiPzqQU
-              </div>}
-          />
           <Route path="*" component={Error} />
         </Switch>
       </React.Suspense>
