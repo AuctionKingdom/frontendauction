@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     display: "inline-block",
-    width: "150px",
-    height: "50px",
+    width: "250px",
+    height: "150px",
     objectFit: "cover",
   },
 }));
@@ -59,7 +59,7 @@ function SignIn() {
           setRedirect(true);
         }
       });
-    }
+    } 
   });
 
   const clickSubmit = (event) => {
@@ -72,7 +72,7 @@ function SignIn() {
     //Call Signin function
 
     signin(user).then((data) => {
-      if (data.error) {
+      if (data && data.error) {
         setError(data.error);
       } else {
         //authenticate
@@ -108,7 +108,7 @@ function SignIn() {
         <div className={classes.paper}>
           <img
             alt="logo"
-            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            src={require("../../logo.png")}
             className={classes.image}
           />
 

@@ -9,6 +9,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(3),
+    position:'fixed',
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
@@ -77,7 +79,6 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid green",
                       color: "green",
                       display: "inline",
                     }}
@@ -99,7 +100,6 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid red",
                       color: "red",
                       display: "inline",
                     }}
@@ -118,8 +118,7 @@ function ResponsiveDrawer(props) {
                 secondary={
                   <div
                     style={{
-                      border: "3px solid blue",
-                      color: "blue",
+                      color: "#8b07b6",
                       display: "inline",
                     }}
                   >
@@ -136,7 +135,11 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar} style={{textAlign:'center'}}>
+        <Typography style={{backgroundColor:'red',color:"white", letterSpacing:'2px', fontSize:24}} variant="body1" component="p">
+            ROOM ID:{props.roomId}
+        </Typography>
+      </div>
       <List>{renderPlayerList()}</List>
     </div>
   );
@@ -154,7 +157,7 @@ function ResponsiveDrawer(props) {
           onClick={handleDrawerToggle}
           className={classes.menuButton}
         >
-          <MenuIcon fontSize="large" style={{ color: "white" }} />
+          <MenuIcon fontSize="large" style={{ color: "white"}} />
         </IconButton>
       </Toolbar>
       <nav className={classes.drawer} aria-label="mailbox folders">

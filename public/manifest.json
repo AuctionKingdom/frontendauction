@@ -3,13 +3,18 @@
   "name": "DreamTeam",
   "icons": [
     {
-    "src":"logo.jpeg",
-    "sizes": "300x300",
-    "type": "image/jpeg"
+    "src":"logo.png",
+    "sizes": "250x250",
+    "type": "image/png"
+    },{
+     "src":"logo.png",
+     "sizes":"64x64 32x32 24x24 16x16",
+     "type":"image/png"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
+  "start_url": "../home",
+  "display": "fullscreen",
   "theme_color": "#000000",
-  "background_color": "#515781"
+  "background_color": "#8b07b6",
+  "orientation":"portrait"
 }

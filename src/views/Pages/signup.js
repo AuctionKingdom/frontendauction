@@ -25,8 +25,8 @@ const myStyles = makeStyles((theme) => ({
   },
   image: {
     display: "inline-block",
-    width: "150px",
-    height: "50px",
+    width: "250px",
+    height: "150px",
     objectFit: "cover",
   },
 }));
@@ -69,7 +69,7 @@ function SignUp() {
         <div className={classes.paper}>
           <img
             alt="logo"
-            src={require("/home/maddy/Desktop/AK/frontendauction/src/logo.png")}
+            src={require("../../logo.png")}
             className={classes.image}
           />
 
@@ -149,7 +149,7 @@ function SignUp() {
               in={true}
               mountOnEnter
               unmountOnExit
-              timeout={{ enter: 2000, exit: 2000 }}
+              timeout={{ enter: 2000, exit: 1000 }}
             >
               <Button
                 type="submit"
