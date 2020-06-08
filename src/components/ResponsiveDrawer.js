@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(3),
-    position:'fixed',
+    position: "fixed",
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
@@ -135,9 +135,18 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} style={{textAlign:'center'}}>
-        <Typography style={{backgroundColor:'red',color:"white", letterSpacing:'2px', fontSize:24}} variant="body1" component="p">
-            ROOM ID:{props.roomId}
+      <div className={classes.toolbar} style={{ textAlign: "center" }}>
+        <Typography
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            letterSpacing: "2px",
+            fontSize: 24,
+          }}
+          variant="body1"
+          component="p"
+        >
+          ROOM ID:{props.roomId}
         </Typography>
       </div>
       <List>{renderPlayerList()}</List>
@@ -157,7 +166,7 @@ function ResponsiveDrawer(props) {
           onClick={handleDrawerToggle}
           className={classes.menuButton}
         >
-          <MenuIcon fontSize="large" style={{ color: "white"}} />
+          <MenuIcon fontSize="large" style={{ color: "white" }} />
         </IconButton>
       </Toolbar>
       <nav className={classes.drawer} aria-label="mailbox folders">

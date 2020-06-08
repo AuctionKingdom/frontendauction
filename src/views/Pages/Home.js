@@ -12,6 +12,8 @@ import Slide from "@material-ui/core/Slide";
 import Switch from "@material-ui/core/Switch";
 import { toast } from "react-toastify";
 
+toast.configure();
+
 function HomePage(props) {
   let jwtToken = localStorage.getItem("jwt");
   let location = useLocation();
@@ -19,7 +21,7 @@ function HomePage(props) {
   const [roomId, setRoomId] = useState("");
   const [roomsize, setRoomSize] = useState(4);
   const Background =
-  "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=867&q=80"
+    "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=867&q=80";
   /**
       Creating room and on success you will be redirected to the corresponding room
   */
@@ -89,12 +91,12 @@ function HomePage(props) {
   */
 
   function createRoom() {
-    if(roomsize >=4 && roomsize <=10){
+    if (roomsize >= 1 && roomsize <= 10) {
       props.socket.emit("Create Room", { token: jwtToken, roomSize: roomsize });
-    }else{
-      toast.error('RoomSize should be >=4',{
-        autoClose:2000
-      })
+    } else {
+      toast.error("RoomSize should be >=4", {
+        autoClose: 2000,
+      });
     }
   }
 
@@ -124,7 +126,6 @@ function HomePage(props) {
         alignItems="center"
         spacing={5}
       >
-
         <Grid item md={6} xs={10}>
           <Slide
             direction="up"
@@ -135,7 +136,11 @@ function HomePage(props) {
           >
             <Paper
               elevation={15}
-              style={{paddingTop:'20px', marginTop: "10%", paddingBottom: "40px" }}
+              style={{
+                paddingTop: "20px",
+                marginTop: "10%",
+                paddingBottom: "40px",
+              }}
             >
               <Typography
                 style={{ textAlign: "center" }}
@@ -143,7 +148,7 @@ function HomePage(props) {
                 component="h6"
               >
                 Play with Friends
-                <Switch onChange={props.otd}  />
+                <Switch onChange={props.otd} />
               </Typography>
               <Grid
                 container
@@ -166,12 +171,11 @@ function HomePage(props) {
                     pattern="\d*"
                     value={roomsize}
                     onChange={(e) => {
-                      if(e.target.value >=4 && e.target.value <=10)
-                          setRoomSize(e.target.value);
-                      else if(e.target.value >= 0 && e.target.value <=10)
-                          setRoomSize(e.target.value);
-                      else if(e.target.value > 10)
-                          setRoomSize(10);
+                      if (e.target.value >= 1 && e.target.value <= 10)
+                        setRoomSize(e.target.value);
+                      else if (e.target.value >= 0 && e.target.value <= 10)
+                        setRoomSize(e.target.value);
+                      else if (e.target.value > 10) setRoomSize(10);
                     }}
                   />
 
@@ -220,46 +224,52 @@ function HomePage(props) {
           </Slide>
         </Grid>
         <Grid item md={4} xs={10}>
-            <Paper
-              elevation={15}
-              style={{paddingTop:'20px', marginTop: "5%", paddingBottom: "40px",border:'2px dotted #8b07b6' }}
+          <Paper
+            elevation={15}
+            style={{
+              paddingTop: "20px",
+              marginTop: "5%",
+              paddingBottom: "40px",
+              border: "2px dotted #8b07b6",
+            }}
+          >
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={6}
+              style={{ paddingTop: "5%" }}
             >
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-                spacing={6}
-                style={{ paddingTop: "5%" }}
-              >
-                <Grid item xs={6} md={6} style={{ border:'3px dotted #8b07b6'}}>
-                  <Typography style={{textAlign:'center'}} variant="h6">
-                      Instruction
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:'justify'}} variant="body1">
-                      1. Create Room and specify the room size (4-10)
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:'justify'}} variant="body1">
-                      2. Ask ur friends to join the room by giving them your roomId
-                      (Top right corner of the room)
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:"justify"}} variant="body1">
-                      3. After the Auction is over, Download the PDF to not lose track of your game
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                    <Typography style={{textAlign:'center'}} variant="body1">
-                        Happy Bidding!!!
-                    </Typography>
-                </Grid>
+              <Grid item xs={6} md={6} style={{ border: "3px dotted #8b07b6" }}>
+                <Typography style={{ textAlign: "center" }} variant="h6">
+                  Instruction
+                </Typography>
               </Grid>
-            </Paper>
+              <Grid item xs={10} md={10}>
+                <Typography style={{ textAlign: "justify" }} variant="body1">
+                  1. Create Room and specify the room size (4-10)
+                </Typography>
+              </Grid>
+              <Grid item xs={10} md={10}>
+                <Typography style={{ textAlign: "justify" }} variant="body1">
+                  2. Ask ur friends to join the room by giving them your roomId
+                  (Top right corner of the room)
+                </Typography>
+              </Grid>
+              <Grid item xs={10} md={10}>
+                <Typography style={{ textAlign: "justify" }} variant="body1">
+                  3. After the Auction is over, Download the PDF to not lose
+                  track of your game
+                </Typography>
+              </Grid>
+              <Grid item xs={10} md={10}>
+                <Typography style={{ textAlign: "center" }} variant="body1">
+                  Happy Bidding!!!
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
         </Grid>
       </Grid>
     </div>

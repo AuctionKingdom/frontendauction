@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles, withStyles} from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import SocketContext from "../../socket-context.js";
 import { toast } from "react-toastify";
@@ -12,8 +12,8 @@ import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import ResponsiveDrawer from "../../components/ResponsiveDrawer";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfDocument } from "../../components/PdfGeneration";
-import Tooltip from '@material-ui/core/Tooltip';
-import Switch from '@material-ui/core/Switch';
+import Tooltip from "@material-ui/core/Tooltip";
+import Switch from "@material-ui/core/Switch";
 // import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ButtonAppBar from "../../components/nav.js";
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: `Arial, Helvetica, sans-serif`,
     flexGrow: 1,
     overflow: "hidden",
-    minHeight:window.innerHeight,
+    minHeight: window.innerHeight,
   },
   player: {
     padding: theme.spacing(2),
@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
+    border: "1px solid #dadde9",
   },
 }))(Tooltip);
 
@@ -73,6 +73,14 @@ function RoomPage(props) {
   const [playerList, setPlayerList] = useState({});
   const [allPlayers, setPlayers] = useState([]);
   const [show, setShow] = useState(false);
+
+  const filterPlayers = (obj, filter, filterValue) =>  
+   Object.keys(obj).reduce((acc, val) =>  
+     (obj[val][filter] === filterValue ?{ 
+          ...acc, 
+          [val]: obj[val] 
+      }:acc                                         
+   ), {});
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
@@ -121,9 +129,12 @@ function RoomPage(props) {
     });
 
     props.socket.on("sold", (data) => {
-      toast.success(`${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`,{
-        autoClose:2000
-      });
+      toast.success(
+        `${data.player} sold to ${JSON.parse(users[data.bidder])["name"]}`,
+        {
+          autoClose: 2000,
+        }
+      );
 
       let userData = { ...users };
       userData[data.bidder] = JSON.stringify({
@@ -195,8 +206,8 @@ function RoomPage(props) {
 
   useEffect(() => {
     props.socket.on("Begin timeout", (data) => {
-      toast.warn("10s more ...Please Decide sooner",{
-        autoClose:9000
+      toast.warn("10s more ...Please Decide sooner", {
+        autoClose: 9000,
       });
     });
 
@@ -207,7 +218,11 @@ function RoomPage(props) {
 
   return (
     <React.Fragment>
-      <ResponsiveDrawer allPlayers={allPlayers} playerList={playerList} roomId={slug} />
+      <ResponsiveDrawer
+        allPlayers={allPlayers}
+        playerList={playerList}
+        roomId={slug}
+      />
 
       <Paper elevation={2}>
         <div className={classes.root}>
@@ -240,29 +255,32 @@ function RoomPage(props) {
                       interactive
                       title={
                         <React.Fragment>
-                          <Typography color="inherit">Leave the room</Typography>
-                          <em>{"Please"}</em> <b>{'Download'}</b> <u>{'the PDF'}</u>.{' '}
+                          <Typography color="inherit">
+                            Leave the room
+                          </Typography>
+                          <em>{"Please"}</em> <b>{"Download"}</b>{" "}
+                          <u>{"the PDF"}</u>.{" "}
                           {"It is a way to keep track of the match"}
                         </React.Fragment>
                       }
                     >
                       <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => {
-                        history.replace("/home", { roomId: slug });
-                      }}
+                        color="primary"
+                        variant="contained"
+                        onClick={() => {
+                          history.replace("/home", { roomId: slug });
+                        }}
                       >
-                      Leave Room
-                    </Button>
+                        Leave Room
+                      </Button>
                     </HtmlTooltip>
                   </div>
                 </Grid>
                 <Grid item xs={6} md={3}>
-                    <Typography>
-                       Toggle Dark Mode:
-                       <Switch onChange={props.otd} />
-                    </Typography>
+                  <Typography>
+                    Toggle Dark Mode:
+                    <Switch onChange={props.otd} />
+                  </Typography>
                   <div className={classes.paper} style={{ marginTop: "3em" }}>
                     <Button
                       type="submit"
@@ -310,7 +328,7 @@ function RoomPage(props) {
                       padding: "10px",
                       color: "white",
                       backgroundColor: "#D11111",
-                      borderRadius:5,
+                      borderRadius: 5,
                     }}
                   >
                     {({ blob, url, loading, error }) =>

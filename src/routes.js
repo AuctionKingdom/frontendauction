@@ -3,11 +3,12 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Loading from "./views/Pages/Loading";
 //import App from './App';
 
-const Error = React.lazy(()=> import("./components/Error"));
+const Error = React.lazy(() => import("./components/Error"));
 const SignIn = React.lazy(() => import("./views/Pages/signin"));
 const SignUp = React.lazy(() => import("./views/Pages/signup"));
 const Home = React.lazy(() => import("./views/Pages/Home.js"));
 const Room = React.lazy(() => import("./views/Pages/Room.js"));
+const Form11 = React.lazy(() => import("./views/Pages/Form11.js"));
 
 const MainRouter = ({ onToggleDark }) => {
   console.log(onToggleDark);
@@ -31,6 +32,7 @@ const MainRouter = ({ onToggleDark }) => {
             name="room"
             render={(props) => <Room {...props} otd={onToggleDark} />}
           />
+          <Route exact path="/team" render={(props) => <Form11 {...props} />} />
           <Route path="*" component={Error} />
         </Switch>
       </React.Suspense>

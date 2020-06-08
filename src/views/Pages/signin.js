@@ -59,7 +59,7 @@ function SignIn() {
           setRedirect(true);
         }
       });
-    } 
+    }
   });
 
   const clickSubmit = (event) => {
