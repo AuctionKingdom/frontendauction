@@ -11,6 +11,8 @@ import ButtonAppBar from "../../components/nav.js";
 import Slide from "@material-ui/core/Slide";
 import Switch from "@material-ui/core/Switch";
 import { toast } from "react-toastify";
+import {Instructions} from './Instructions'
+
 
 function HomePage(props) {
   let jwtToken = localStorage.getItem("jwt");
@@ -219,48 +221,9 @@ function HomePage(props) {
             </Paper>
           </Slide>
         </Grid>
-        <Grid item md={4} xs={10}>
-            <Paper
-              elevation={15}
-              style={{paddingTop:'20px', marginTop: "5%", paddingBottom: "40px",border:'2px dotted #8b07b6' }}
-            >
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-                spacing={6}
-                style={{ paddingTop: "5%" }}
-              >
-                <Grid item xs={6} md={6} style={{ border:'3px dotted #8b07b6'}}>
-                  <Typography style={{textAlign:'center'}} variant="h6">
-                      Instruction
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:'justify'}} variant="body1">
-                      1. Create Room and specify the room size (4-10)
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:'justify'}} variant="body1">
-                      2. Ask ur friends to join the room by giving them your roomId
-                      (Top right corner of the room)
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                  <Typography style={{textAlign:"justify"}} variant="body1">
-                      3. After the Auction is over, Download the PDF to not lose track of your game
-                  </Typography>
-                </Grid>
-                <Grid item xs={10} md={10}>
-                    <Typography style={{textAlign:'center'}} variant="body1">
-                        Happy Bidding!!!
-                    </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-        </Grid>
+
+        <Instructions/>
+
       </Grid>
     </div>
   );
