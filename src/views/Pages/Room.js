@@ -260,7 +260,7 @@ function RoomPage(props) {
                 </Grid>
                 <Grid item xs={6} md={3}>
                     <Typography>
-                       Toggle Dark Mode:
+                       Dark Mode: 
                        <Switch onChange={props.otd} />
                     </Typography>
                   <div className={classes.paper} style={{ marginTop: "3em" }}>
