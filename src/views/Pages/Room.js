@@ -5,7 +5,7 @@ import SocketContext from "../../socket-context.js";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PlayerDetails from "../../components/PlayerDetails";
-import { Typography, Button, Grid, Paper } from "@material-ui/core";
+import { Typography, Button, Grid, Paper, Modal } from "@material-ui/core";
 import UserExpand from "../../components/UserExpand";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     overflow: "hidden",
     minHeight: window.innerHeight,
+  },
+  modal: {
+    position: "absolute",
+    top: "20vh",
+    left: "15vw",
+    width: 200,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    borderRadius: 10,
+    padding: theme.spacing(2, 4, 3),
   },
   player: {
     padding: theme.spacing(2),
@@ -61,7 +71,6 @@ const HtmlTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 function RoomPage(props) {
-  console.log(props);
   const classes = useStyles();
   let history = useHistory();
   let location = useLocation();
@@ -73,14 +82,64 @@ function RoomPage(props) {
   const [playerList, setPlayerList] = useState({});
   const [allPlayers, setPlayers] = useState([]);
   const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const filterPlayers = (obj, filter, filterValue) =>  
-   Object.keys(obj).reduce((acc, val) =>  
-     (obj[val][filter] === filterValue ?{ 
-          ...acc, 
-          [val]: obj[val] 
-      }:acc                                         
-   ), {});
+  /**
+   *
+   * @param {*} obj
+   * @param {*} filter
+   * @param {*} filterValue
+   */
+  const filterPlayers = (obj, filter, filterValue) =>
+    Object.keys(obj).reduce(
+      (acc, val) =>
+        JSON.parse(obj[val])[filter] === filterValue
+          ? {
+              ...acc,
+              [val]: JSON.parse(obj[val]),
+            }
+          : acc,
+      {}
+    );
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  /**
+   * Handle Close Button
+   */
+
+  const closeRoom = (
+    <div className={classes.modal}>
+      <h2 id="simple-modal-title">Do you want to leave?</h2>
+      <p id="simple-modal-description">
+        Please make sure you have 11 players :/!
+      </p>
+      <Button
+        onClick={() => {
+          let list = filterPlayers(playerList, "highestBidder", email);
+          if (Object.keys(list).length >= 11) {
+            history.replace("/team", {
+              roomId: slug,
+              list: list,
+            });
+          } else {
+            history.replace("/home");
+          }
+          props.socket.emit("leave", { roomId: slug });
+        }}
+      >
+        Ok
+      </Button>
+      <Button onClick={handleClose}>Close</Button>
+    </div>
+  );
 
   useEffect(() => {
     let token = localStorage.getItem("jwt");
@@ -99,6 +158,8 @@ function RoomPage(props) {
     props.socket.on("success", (data) => {
       toast.success("Success");
     });
+
+    setEmail(JSON.parse(token).user.email);
 
     return () => {
       props.socket.off("failure");
@@ -267,9 +328,7 @@ function RoomPage(props) {
                       <Button
                         color="primary"
                         variant="contained"
-                        onClick={() => {
-                          history.replace("/home", { roomId: slug });
-                        }}
+                        onClick={handleOpen}
                       >
                         Leave Room
                       </Button>
@@ -277,10 +336,10 @@ function RoomPage(props) {
                   </div>
                 </Grid>
                 <Grid item xs={6} md={3}>
-                    <Typography>
-                       Dark Mode: 
-                       <Switch onChange={props.otd} />
-                    </Typography>
+                  <Typography>
+                    Dark Mode:
+                    <Switch onChange={props.otd} />
+                  </Typography>
                   <div className={classes.paper} style={{ marginTop: "3em" }}>
                     <Button
                       type="submit"
@@ -341,6 +400,14 @@ function RoomPage(props) {
           </Grid>
         </div>
       </Paper>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {closeRoom}
+      </Modal>
     </React.Fragment>
   );
 }

@@ -11,7 +11,7 @@ import ButtonAppBar from "../../components/nav.js";
 import Slide from "@material-ui/core/Slide";
 import Switch from "@material-ui/core/Switch";
 import { toast } from "react-toastify";
-import {Instructions} from './Instructions'
+import { Instructions } from "./Instructions";
 
 toast.configure();
 
@@ -48,13 +48,13 @@ function HomePage(props) {
       setTimeout(() => {
         console.log(location.pathname);
         history.push("/", { previousLocation: location.pathname });
-      }, 1500);
+      }, 500);
     } else if (location.state.Auth === false) {
       alert("Not Authenticated");
 
       setTimeout(() => {
         history.push("/", { previousLocation: location.pathname });
-      }, 1500);
+      }, 500);
     }
 
     if (location.state) {
@@ -92,7 +92,7 @@ function HomePage(props) {
   */
 
   function createRoom() {
-    if (roomsize >= 1 && roomsize <= 10) {
+    if (roomsize >= 4 && roomsize <= 10) {
       props.socket.emit("Create Room", { token: jwtToken, roomSize: roomsize });
     } else {
       toast.error("RoomSize should be >=4", {
@@ -225,8 +225,7 @@ function HomePage(props) {
           </Slide>
         </Grid>
 
-        <Instructions/>
-
+        <Instructions />
       </Grid>
     </div>
   );

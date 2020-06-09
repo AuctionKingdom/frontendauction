@@ -65,7 +65,6 @@ export default function UserExpand(props) {
   */
   function renderPlayerList(emailId) {
     if (props.playerList) {
-      console.log(props.playerList);
       return Object.keys(props.playerList).map((key) => {
         if (JSON.parse(props.playerList[key])["highestBidder"] === emailId) {
           return (
