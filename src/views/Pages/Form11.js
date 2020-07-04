@@ -46,7 +46,7 @@ export default function Form11(props) {
     if(location.state === undefined){
       history.replace('/home');
     }
-  },[])
+  },[location,history])
 
   function onDragEnd(result) {
     // dropped outside the list
