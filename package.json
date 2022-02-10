@@ -12,7 +12,7 @@
     "@testing-library/user-event": "7.2.1",
     "base-64": "0.1.0",
     "lodash": "^4.17.15",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-add-to-homescreen": "^1.1.0",
     "react-animated-modal": "^1.1.1",
